@@ -1,0 +1,18 @@
+@import './styles/fonts.css';
+@import './styles/defaults.css';
+@import './styles/reset.css';
+@import './styles/helpers.css';
+@import './styles//variables.css';
+
+html{
+    font-size: 10px;
+}
+
+
+html,*,body {
+     font-family: 'IRAN sans';
+}
+
+body{
+    font-size: 1.6rem;
+}
