@@ -1,4 +1,4 @@
-import { Link, Navigate, useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import Footer from "../../Components/Footer/Footer";
 import Button from "../../Components/Form/Button";
 import Input from "../../Components/Form/Input";
@@ -6,21 +6,24 @@ import Navbar from "../../Components/Navbar/Navbar";
 import Topbar from "../../Components/Topbar/Topbar";
 import { useForm } from "../../hooks/useForm";
 import AuthContext from "../../context/authContext";
-import Swal from 'sweetalert2';
-import withReactContent from 'sweetalert2-react-content'
+import Swal from "sweetalert2";
+import ReCAPTCHA from "react-google-recaptcha";
+import withReactContent from "sweetalert2-react-content";
 
-
-
-import { requiredValidator,minValidator,maxValidator } from "../../components/validators/rules";
+import {
+  requiredValidator,
+  minValidator,
+  maxValidator,
+} from "../../components/validators/rules";
 
 import "./Login.css";
-import { useContext } from "react";
-
+import { useContext, useState } from "react";
 
 export default function Login() {
-  const mySwal = withReactContent(Swal)
-  const navigate = useNavigate()
-  const authContext = useContext(AuthContext)
+  const [isGoogleRecapthaVerify,setIsGoogleRecapthaVerify] = useState(false)
+  const mySwal = withReactContent(Swal);
+  const navigate = useNavigate();
+  const authContext = useContext(AuthContext);
   const [formState, onInputHandler] = useForm(
     {
       username: {
@@ -35,48 +38,57 @@ export default function Login() {
     false
   );
 
+  const onChangeHandler = () => {
+    console.log('google recaptcha verified')
+    setIsGoogleRecapthaVerify(true)
+  }
+
   const userLogin = (event) => {
     event.preventDefault();
     let userInfos = {
       identifier: formState.inputs.username.value,
-      password: formState.inputs.password.value
-    }
-    fetch('http://localhost:4000/v1/auth/login',{
-      method:'POST',
-      headers:{
-        'Content-Type':'application/json'
+      password: formState.inputs.password.value,
+    };
+    fetch("http://localhost:4000/v1/auth/login", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
       },
-      body: JSON.stringify(userInfos)
-    }).then(res => {
-      if(!res.ok){
-        mySwal.fire({
-          title:'همچین کاربری وجود ندارد',
-          icon:'error',
-          width:'30%',
-          grow:'row',
-          confirmButtonText:'تلاش دوباره'
-        })
-      }else{
-        return res.json()
-      }
+      body: JSON.stringify(userInfos),
     })
-      .then(result => {
-        const token = result.accessToken
-        mySwal.fire({
-          title:'لاگین با موفقیت انجام شد',
-          icon:'success',
-          width:'30%',
-          grow:'row',
-          confirmButtonText:'ورود به پنل کاربری'
-        }).then(res => {
-          if(res.isConfirmed){
-            navigate('/')
-            authContext.login({},token)
-          }
-        })
-      }).catch(err => {
-        console.log(err)
+      .then((res) => {
+        if (!res.ok) {
+          mySwal.fire({
+            title: "همچین کاربری وجود ندارد",
+            icon: "error",
+            width: "30%",
+            grow: "row",
+            confirmButtonText: "تلاش دوباره",
+          });
+        } else {
+          return res.json();
+        }
       })
+      .then((result) => {
+        const token = result.accessToken;
+        mySwal
+          .fire({
+            title: "لاگین با موفقیت انجام شد",
+            icon: "success",
+            width: "30%",
+            grow: "row",
+            confirmButtonText: "ورود به پنل کاربری",
+          })
+          .then((res) => {
+            if (res.isConfirmed) {
+              navigate("/");
+              authContext.login({}, token);
+            }
+          });
+      })
+      .catch((err) => {
+        console.log(err);
+      });
   };
 
   return (
@@ -104,10 +116,7 @@ export default function Login() {
                 type="text"
                 placeholder="نام کاربری یا آدرس ایمیل"
                 element="input"
-                validations={[
-                  requiredValidator(),
-                  minValidator(8)
-                ]}
+                validations={[requiredValidator(), minValidator(8)]}
                 onInputHandler={onInputHandler}
               />
               <i className="login-form__username-icon fa fa-user"></i>
@@ -129,15 +138,16 @@ export default function Login() {
 
               <i className="login-form__password-icon fa fa-lock-open"></i>
             </div>
+            <ReCAPTCHA className="google-recaptha" sitekey="6LeIxAcTAAAAAJcZVRqyHh71UMIEGNQ_MXjiZKhI" onChange={onChangeHandler} />,
             <Button
               className={`login-form__btn ${
-                formState.isFormValid
+                formState.isFormValid && isGoogleRecapthaVerify
                   ? "login-form__btn-success"
                   : "login-form__btn-error"
               }`}
               type="button"
               onClick={userLogin}
-              disabled={!formState.isFormValid}
+              disabled={!formState.isFormValid || !isGoogleRecapthaVerify}
             >
               <i className="login-form__btn-icon fas fa-sign-out-alt"></i>
               <span className="login-form__btn-text">ورود</span>
