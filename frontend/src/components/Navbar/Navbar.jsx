@@ -1,5 +1,11 @@
+import AuthContext from "../../context/authContext";
+import { useContext } from "react";
+import { Link } from "react-router-dom";
 import "./Navbar.css";
 export default function Navbar() {
+  const authContext = useContext(AuthContext)
+  console.log(authContext)
+
   return (
     <div className="main-header">
       <div className="container-fluid">
@@ -140,9 +146,11 @@ export default function Navbar() {
             <a href="#" className="main-header__cart-btn">
               <i className="fas fa-shopping-cart main-header__cart-icon"></i>
             </a>
-            <a href="#" className="main-header__profile">
-              <span className="main-header__profile-text">محمدامین سعیدی راد</span>
-            </a>
+            <Link to={authContext.isLoggedIn ? '/' : '/login'} className="main-header__profile">
+              <span className="main-header__profile-text">
+                {authContext.isLoggedIn ? authContext.userInfos.name : 'ورود | ثبت نام'}
+              </span>
+            </Link>
           </div>
         </div>
       </div>
