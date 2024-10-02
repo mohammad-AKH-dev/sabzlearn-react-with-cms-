@@ -4,8 +4,27 @@ import Pagination from "../../components/Pagination/Pagination";
 import Topbar from '../../components/Topbar/Topbar'
 import Navbar from '../../components/Navbar/Navbar'
 import Footer from '../../components/Footer/Footer'
+import { useEffect, useState } from "react";
+import { useParams } from "react-router-dom";
 
 export default function Category() {
+  const [categoryCourses,setCategoryCourses] = useState([])
+  const [category,setCategory] = useState('')
+  let params = useParams()
+
+  useEffect(() => {
+     setCategory(params.categoryName)
+  },[params.categoryName])
+  
+
+  useEffect(() => {
+     fetch(`http://localhost:4000/v1/courses/category/${category}`)
+     .then(res => res.json())
+     .then(courses => {
+      setCategoryCourses(courses)
+     })
+  },[category])
+
   return (
     <>
     <Topbar/>
@@ -64,9 +83,18 @@ export default function Category() {
           <div className="courses-content">
             <div className="container">
               <div className="row">
-                <CourseBox />
-                <CourseBox />
-                <CourseBox />
+               {categoryCourses.length ? [...categoryCourses].reverse().map(course => (
+                 <CourseBox
+                 key={course._id}
+                 title={course.name}
+                 teacher={course.creator}
+                 img={`http://localhost:4000/courses/covers/${course.cover}`}
+                 students={course.registers}
+                 coursePrice={course.price}
+                 score={course.courseAverageScore}
+                 href={course.shortName}
+               />
+               )):<div className="alert alert-danger">دوره ای برای این دسته بندی وجود ندارد</div>}
               </div>
             </div>
           </div>

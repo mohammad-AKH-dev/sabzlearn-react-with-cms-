@@ -1,12 +1,18 @@
 import Breadcrumb from "../../Components/Breadcrumb/Breadcrumb";
-import CourseBox from "../../Components/CourseBox/CourseBox";
+import CourseBox from "../../components/CourseBox/CourseBox";
 import Topbar from '../../components/Topbar/Topbar'
 import Navbar from '../../components/Navbar/Navbar'
 import Footer from '../../components/Footer/Footer'
 
 import "./Courses.css";
+import { useEffect } from "react";
 
 export default function Courses() {
+  useEffect(() => {
+  
+  })
+
+
   return (
     <>
      <Topbar/>

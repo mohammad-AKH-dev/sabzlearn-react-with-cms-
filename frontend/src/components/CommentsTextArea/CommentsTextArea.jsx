@@ -1,64 +1,10 @@
-import { useContext, useState } from "react";
-import AuthContext from "../../context/authContext";
-import Swal from 'sweetalert2'
-import withReactContent from 'sweetalert2-react-content'
 import "./CommentsTextArea.css";
-import { Link, useParams } from "react-router-dom";
+import { Link } from "react-router-dom";
+import AuthContext from "../../context/authContext";
+import { useContext } from "react";
 
-export default function CommentsTextArea({ comments , setComments}) {
-  const [newComment,setNewComment] = useState('')
-  const [score,setScore] = useState(5)
+export default function CommentsTextArea({ comments , setComments , newComment , setNewComment, submitComment}) {
   const authContext = useContext(AuthContext)
-  const MySwal = withReactContent(Swal)
-  const params = useParams()
-
-
-  const submitComment = async (e) => {
-    e.preventDefault()
-
-     if(newComment.length) {
-       let commentDetails = {
-         body:newComment,
-         courseShortName:params.courseName,
-         score
-       }
-
-       const res = await fetch('http://localhost:4000/v1/comments',{
-         method:'POST',
-         headers:{
-           Authorization:`Bearer ${authContext.token}`,
-           "Content-type": 'application/json'
-         },
-         body: JSON.stringify(commentDetails)
-       })
-       console.log(res)
-       if(res.ok){
-         MySwal.fire({
-          title:'کامنت با موفقیت ثبت شد:)',
-          icon:'success',
-          timer:2000,
-          confirmButtonText:'بسیار هم عالی',
-         }).then(() => {
-          const localStorageData = JSON.parse(localStorage.getItem('user'))
-          fetch(`http://localhost:4000/v1/courses/${params.courseName}`, {
-            method: "GET",
-            Authorization: `Bearer ${localStorageData ? localStorageData.token : null}`,
-          })
-            .then((res) => res.json())
-            .then((courseInfo) => {
-              setComments(courseInfo.comments);
-            });
-         })
-       }else{
-        MySwal.fire({
-          title:'مشکلی در ثبت کامنت پیش آمده',
-          icon:'error',
-          timer:2000,
-          confirmButtonText:'متوجه شدم'
-       })
-     }
-  }
-}
 
   return (
     <div className="comments">

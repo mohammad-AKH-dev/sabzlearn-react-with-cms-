@@ -1,20 +1,27 @@
 import "./CourseInfo.css";
 import Breadcrumb from "../../Components/Breadcrumb/Breadcrumb";
+import AuthContext from "../../context/authContext";
 import CourseDetailBox from "../../Components/CourseDetailBox/CourseDetailBox";
 import CommentsTextArea from "../../components/CommentsTextArea/CommentsTextArea";
 import Accordion from "react-bootstrap/Accordion";
 import Topbar from "../../components/Topbar/Topbar";
 import Navbar from "../../components/Navbar/Navbar";
 import Footer from "../../components/Footer/Footer";
-import {  useEffect, useState } from "react";
+import Swal from 'sweetalert2'
+import withReactContent from 'sweetalert2-react-content'
+import {  useContext, useEffect, useState } from "react";
 import { useParams , Link} from "react-router-dom";
 
 export default function CourseInfo() {
   const [comments, setComments] = useState([]);
   const [sessions, setSessions] = useState([]);
   const [createdAt, setCreatedAt] = useState("");
+  const [score,setScore] = useState(5)
   const [updatedAt, setUpdatedAt] = useState("");
   const [courseDetails, setCourseDetails] = useState({});
+  const [newComment,setNewComment] = useState('')
+  const authContext = useContext(AuthContext)
+  const MySwal = withReactContent(Swal)
   const params = useParams();
 
   useEffect(() => {
@@ -33,6 +40,55 @@ export default function CourseInfo() {
           setCourseDetails(courseInfo);
         });
   }, [params.courseName]);
+
+  const submitComment = async (e) => {
+    e.preventDefault()
+
+     if(newComment.length) {
+       let commentDetails = {
+         body:newComment,
+         courseShortName:params.courseName,
+         score
+       }
+
+       const res = await fetch('http://localhost:4000/v1/comments',{
+         method:'POST',
+         headers:{
+           Authorization:`Bearer ${authContext.token}`,
+           "Content-type": 'application/json'
+         },
+         body: JSON.stringify(commentDetails)
+       })
+       console.log(res)
+       if(res.ok){
+         MySwal.fire({
+          title:'کامنت با موفقیت ثبت شد:)',
+          icon:'success',
+          timer:2000,
+          confirmButtonText:'بسیار هم عالی',
+         }).then(() => {
+          const localStorageData = JSON.parse(localStorage.getItem('user'))
+          fetch(`http://localhost:4000/v1/courses/${params.courseName}`, {
+            method: "GET",
+            Authorization: `Bearer ${localStorageData ? localStorageData.token : null}`,
+          })
+            .then((res) => res.json())
+            .then((courseInfo) => {
+              setComments(courseInfo.comments);
+              setNewComment('')
+            });
+         })
+       }else{
+        MySwal.fire({
+          title:'مشکلی در ثبت کامنت پیش آمده',
+          icon:'error',
+          timer:2000,
+          confirmButtonText:'متوجه شدم'
+       })
+     }
+  }
+}
+
 
   return (
     <>
@@ -289,7 +345,7 @@ export default function CourseInfo() {
                 </div>
 
                 {/* Finish Teacher Details */}
-                <CommentsTextArea comments={comments} setComments={setComments} />
+                <CommentsTextArea comments={comments} setComments={setComments} newComment={newComment} setNewComment={setNewComment} submitComment={submitComment}/>
               </div>
             </div>
 
