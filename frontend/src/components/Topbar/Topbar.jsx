@@ -8,7 +8,6 @@ export default function Topbar() {
     fetch("http://localhost:4000/v1/menus/topbar")
       .then((res) => res.json())
       .then((menus) => {
-        console.log(menus)
         setAllTopbarLinks(menus);
       });
   }, []);
@@ -24,9 +23,16 @@ export default function Topbar() {
         <div className="top-bar__content">
           <div className="top-bar__right">
             <ul className="top-bar__menu">
-              {getRandomItemsFromArray(allTopbarLinks,6).map((link) => (
-                <li key={link.id} className="top-bar__item">
-                  <Link to={`${link.href.includes('course-info') ? link.href :`/course-info/${link.href}`}`} className="top-bar__link">
+              {getRandomItemsFromArray(allTopbarLinks, 6).map((link) => (
+                <li key={link._id} className="top-bar__item">
+                  <Link
+                    to={`${
+                      link.href.includes("course-info")
+                        ? link.href
+                        : `/course-info/${link.href}`
+                    }`}
+                    className="top-bar__link"
+                  >
                     {link.title}
                   </Link>
                 </li>

@@ -20,7 +20,7 @@ function App() {
 
   const logout = useCallback(() => {
     setToken(null);
-    setToken(null);
+    setIsLoggedIn(false)
     setUserInfos({});
     localStorage.removeItem("user");
   },[])
