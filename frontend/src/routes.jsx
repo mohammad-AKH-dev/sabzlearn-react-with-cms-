@@ -5,6 +5,7 @@ import ArticleInfo from "./pages/ArticleInfo/ArticleInfo";
 import Courses from "./pages/Courses/Courses";
 import Login from "./pages/Login/Login";
 import Register from "./pages/Register/Register";
+import Articles from "./pages/Articles/Articles";
 
 const routes = [
     {path: '/', element:<Index/>},
@@ -14,6 +15,7 @@ const routes = [
     {path:'/courses/:page',element:<Courses/>},
     {path:'/login',element:<Login/>},
     {path:'/register',element:<Register/>},
+    {path:'/articles/:page',element:<Articles/>}
     
 ]
 

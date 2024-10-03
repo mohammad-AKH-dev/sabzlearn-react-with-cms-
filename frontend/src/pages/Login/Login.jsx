@@ -93,7 +93,6 @@ export default function Login() {
 
   return (
     <>
-      <Topbar />
       <Navbar />
 
       <section className="login-register">

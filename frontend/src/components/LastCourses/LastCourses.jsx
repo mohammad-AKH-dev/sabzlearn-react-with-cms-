@@ -12,7 +12,6 @@ export default function LastCourses() {
     fetch("http://localhost:4000/v1/courses")
       .then((res) => res.json())
       .then((courses) => {
-        console.log(courses);
         setAllCourses(courses);
       });
   }, []);
@@ -33,7 +32,7 @@ export default function LastCourses() {
             <div className="row">
               {allCourses.length
                 ? [...allCourses]
-                    .reverse()
+                    .reverse().splice(0,6)
                     .map((course) => (
                       <CourseBox
                         key={course._id}
