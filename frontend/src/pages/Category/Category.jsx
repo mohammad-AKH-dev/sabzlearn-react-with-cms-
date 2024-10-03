@@ -1,37 +1,35 @@
 import "./Category.css";
 import CourseBox from "../../components/CourseBox/CourseBox";
 import Pagination from "../../components/Pagination/Pagination";
-import Topbar from '../../components/Topbar/Topbar'
-import Navbar from '../../components/Navbar/Navbar'
-import Footer from '../../components/Footer/Footer'
+import Topbar from "../../components/Topbar/Topbar";
+import Navbar from "../../components/Navbar/Navbar";
+import Footer from "../../components/Footer/Footer";
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 
 export default function Category() {
-  const [categoryCourses,setCategoryCourses] = useState([])
-  const [category,setCategory] = useState('')
-  let params = useParams()
+  const [categoryCourses, setCategoryCourses] = useState([]);
+  const {categoryName} = useParams()
 
   useEffect(() => {
-     setCategory(params.categoryName)
-  },[params.categoryName])
-  
-
-  useEffect(() => {
-     fetch(`http://localhost:4000/v1/courses/category/${category}`)
-     .then(res => res.json())
-     .then(courses => {
-      setCategoryCourses(courses)
-     })
-  },[category])
+    fetch(`http://localhost:4000/v1/courses/category/${categoryName}`)
+      .then((res) => res.json())
+      .then((courses) => {
+        setCategoryCourses(courses);
+      });
+  }, [categoryName]);
 
   return (
     <>
-    <Topbar/>
-    <Navbar/>
+      <Topbar />
+      <Navbar />
       <section className="courses">
         <div className="container">
-          <div className="courses-top-bar">
+          
+
+          {categoryCourses.length ? (
+            <>
+            <div className="courses-top-bar">
             <div className="courses-top-bar__right">
               <div className="courses-top-bar__row-btn courses-top-bar__icon--active">
                 <i className="fas fa-border-all courses-top-bar__icon"></i>
@@ -79,31 +77,35 @@ export default function Category() {
               </form>
             </div>
           </div>
-
-          <div className="courses-content">
-            <div className="container">
-              <div className="row">
-               {categoryCourses.length ? [...categoryCourses].reverse().map(course => (
-                 <CourseBox
-                 key={course._id}
-                 title={course.name}
-                 teacher={course.creator}
-                 img={`http://localhost:4000/courses/covers/${course.cover}`}
-                 students={course.registers}
-                 coursePrice={course.price}
-                 score={course.courseAverageScore}
-                 href={course.shortName}
-               />
-               )):<div className="alert alert-danger">دوره ای برای این دسته بندی وجود ندارد</div>}
+            <div className="courses-content">
+              <div className="container">
+                <div className="row">
+                  {[...categoryCourses].reverse().map((course) => (
+                    <CourseBox
+                      key={course._id}
+                      title={course.name}
+                      teacher={course.creator}
+                      img={`http://localhost:4000/courses/covers/${course.cover}`}
+                      students={course.registers}
+                      coursePrice={course.price}
+                      score={course.courseAverageScore}
+                      href={course.shortName}
+                    />
+                  ))}
+                </div>
               </div>
+              <Pagination />
             </div>
-          </div>
-
-          <Pagination />
+            </>
+          ) : (
+            <div className="alert alert-danger">
+              دوره ای برای این دسته بندی وجود ندارد
+            </div>
+          )}
 
         </div>
       </section>
-      <Footer/>
+      <Footer />
     </>
   );
 }
