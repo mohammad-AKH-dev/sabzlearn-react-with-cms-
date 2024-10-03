@@ -20,6 +20,7 @@ export default function CourseInfo() {
   const [updatedAt, setUpdatedAt] = useState("");
   const [courseDetails, setCourseDetails] = useState({});
   const [newComment,setNewComment] = useState('')
+  const [courseTeacherInfos,setCourseTeacherInfos] = useState({})
   const authContext = useContext(AuthContext)
   const MySwal = withReactContent(Swal)
   const params = useParams();
@@ -37,6 +38,7 @@ export default function CourseInfo() {
           setSessions(courseInfo.sessions);
           setCreatedAt(courseInfo.createdAt);
           setUpdatedAt(courseInfo.updatedAt);
+          setCourseTeacherInfos(courseInfo.creator)
           setCourseDetails(courseInfo);
         });
   }, [params.courseName]);
@@ -325,7 +327,7 @@ export default function CourseInfo() {
                       />
                       <div className="techer-details__header-titles">
                         <a href="#" className="techer-details__header-link">
-                          محمدامین سعیدی راد
+                          {courseTeacherInfos.name}
                         </a>
                         <span className="techer-details__header-skill">
                           Front End & Back End Developer

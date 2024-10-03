@@ -9,7 +9,9 @@ import { useParams } from "react-router-dom";
 
 export default function Category() {
   const [categoryCourses, setCategoryCourses] = useState([]);
+  const [shownCategories , setShownCategories] = useState([])
   const {categoryName} = useParams()
+  console.log(categoryName)
 
   useEffect(() => {
     fetch(`http://localhost:4000/v1/courses/category/${categoryName}`)
@@ -80,7 +82,7 @@ export default function Category() {
             <div className="courses-content">
               <div className="container">
                 <div className="row">
-                  {[...categoryCourses].reverse().map((course) => (
+                  {[...shownCategories].reverse().map((course) => (
                     <CourseBox
                       key={course._id}
                       title={course.name}
@@ -94,7 +96,12 @@ export default function Category() {
                   ))}
                 </div>
               </div>
-              <Pagination />
+              <Pagination 
+               items={categoryCourses}
+               itemsCount={3}
+               pathName={`category-info/${categoryName}`}
+               setShownCourses={setShownCategories}
+              />
             </div>
             </>
           ) : (

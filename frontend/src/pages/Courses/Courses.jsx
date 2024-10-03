@@ -10,6 +10,7 @@ import Pagination from "../../components/Pagination/Pagination";
 
 export default function Courses() {
   const [allCourses,setAllCourses] = useState([])
+  const [shownCourses,setShownCourses] = useState([])
 
 
 
@@ -31,7 +32,7 @@ export default function Courses() {
           {
             id: 2,
             title: "تمامی دوره ها",
-            to: "courses",
+            to: "courses/",
           },
         ]}
       />
@@ -44,7 +45,7 @@ export default function Courses() {
               <div className="row">
                 {allCourses.length ? (
                   <>
-                   {allCourses.map(course => (
+                   {shownCourses.map(course => (
                      <CourseBox
                      key={course._id}
                      title={course.name}
@@ -56,7 +57,12 @@ export default function Courses() {
                      href={course.shortName}
                      />
                    ))}
-                   <Pagination/>
+                   <Pagination
+                    items={allCourses}
+                    itemsCount={2}
+                    pathName={'courses'}
+                    setShownCourses={setShownCourses}
+                   />
                   </>
                 ): null}
               </div>
