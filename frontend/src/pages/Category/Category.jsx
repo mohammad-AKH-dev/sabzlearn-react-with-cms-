@@ -34,13 +34,13 @@ export default function Category() {
         break
       }
       case 'free':{
-         const freeCourses = categoryCourses.filter(course => course.price === 0)
+         const freeCourses = [...categoryCourses].filter(course => course.price === 0)
          setOrderedCourses(freeCourses)
          setStatusTitle('مرتب سازی دوره های رایگان')
          break;
       }
       case 'money': {
-        const moneyCourses = categoryCourses.filter(course => course.price !== 0)
+        const moneyCourses = [...categoryCourses].filter(course => course.price !== 0)
         setOrderedCourses(moneyCourses)
         setStatusTitle('مرتب سازی دوره های پولی')
         break;
@@ -144,18 +144,23 @@ export default function Category() {
               <div className="courses-content">
                 <div className="container">
                   <div className="row">
-                    {[...shownCategories].reverse().map((course) => (
-                      <CourseBox
-                        key={course._id}
-                        title={course.name}
-                        teacher={course.creator}
-                        img={`http://localhost:4000/courses/covers/${course.cover}`}
-                        students={course.registers}
-                        coursePrice={course.price}
-                        score={course.courseAverageScore}
-                        href={course.shortName}
-                      />
-                    ))}
+                    {
+                      shownCategories.length ?
+                      [...shownCategories].reverse().map((course) => (
+                        <CourseBox
+                          key={course._id}
+                          title={course.name}
+                          teacher={course.creator}
+                          img={`http://localhost:4000/courses/covers/${course.cover}`}
+                          students={course.registers}
+                          coursePrice={course.price}
+                          score={course.courseAverageScore}
+                          href={course.shortName}
+                        />
+                      ))
+                      :
+                     <div className="alert alert-warning">دوره ای برای  {statusTitle} وجود ندارد</div>
+                    }
                   </div>
                 </div>
                 <Pagination
