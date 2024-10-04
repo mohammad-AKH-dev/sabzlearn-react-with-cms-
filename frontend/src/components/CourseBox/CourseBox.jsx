@@ -10,7 +10,8 @@ export default function CourseBox({
   coursePrice,
   students,
   score,
-  href
+  href,
+  width
 }) {
   const [isImgShow, setIsImgShow] = useState(false);
 
@@ -18,7 +19,7 @@ export default function CourseBox({
   const onImageError = () => {};
 
   return (
-    <div className="col-4">
+    <div className='col-4' style={{width:width}}>
       <div className="course-box">
         <Link to={`/course-info/${href}`}>
           <img

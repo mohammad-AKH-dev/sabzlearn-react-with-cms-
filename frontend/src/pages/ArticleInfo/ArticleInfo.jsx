@@ -42,12 +42,12 @@ export default function ArticleInfo() {
           {
             id: 2,
             title: "مقاله ها",
-            to: "category-info/frontend",
+            to: "articles/1",
           },
           {
             id: 3,
-            title: "ویو Vs ری‌اکت",
-            to: "course-info/js-expert",
+            title: `${articleTitle}`,
+            to: `article-info/${articleName}`,
           },
         ]}
       />
@@ -84,7 +84,7 @@ export default function ArticleInfo() {
                   <div className="article-header__category article-header__item">
                     <i className="far fa-eye article-header__icon"></i>
                     <span className="article-header__text">
-                      {`تاریخ انتشار: ${articleCreateDate.slice(0,10)}`}
+                      {`تاریخ انتشار: ${articleCreateDate?.slice(0,10)}`}
                     </span>
                   </div>
                 </div>
