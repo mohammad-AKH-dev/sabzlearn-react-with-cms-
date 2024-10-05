@@ -11,6 +11,7 @@ export default function Category() {
   const [categoryCourses, setCategoryCourses] = useState([]);
   const [orderedCourses,setOrderedCourses] = useState([])
   const [shownCategories, setShownCategories] = useState([]);
+  const [searchInputValue,setSearchInputValue] = useState('')
   const [status, setStatus] = useState("default");
   const [statusTitle,setStatusTitle] = useState('مرتب سازی بر اساس پیش فرض')
   const { categoryName } = useParams();
@@ -24,6 +25,17 @@ export default function Category() {
         setOrderedCourses(courses)
       });
   }, [categoryName]);
+
+  const searchValueChangeHandler = (e) => {
+      setSearchInputValue(e.target.value)
+      let fillteredCourses = [...categoryCourses].filter(course => {
+        if(course.name.toLowerCase().includes(e.target.value.toLowerCase())){
+          return course
+        }
+      })
+      console.log(fillteredCourses)
+      setOrderedCourses(fillteredCourses)
+  }
 
 
   useEffect(() => {
@@ -136,6 +148,8 @@ export default function Category() {
                       type="text"
                       className="courses-top-bar__input"
                       placeholder="جستجوی دوره ..."
+                      value={searchInputValue}
+                      onChange={(event) => searchValueChangeHandler(event) }
                     />
                     <i className="fas fa-search courses-top-bar__search-icon"></i>
                   </form>

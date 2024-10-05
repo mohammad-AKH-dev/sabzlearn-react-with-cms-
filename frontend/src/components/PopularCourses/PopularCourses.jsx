@@ -40,17 +40,17 @@ export default function PopularCourses() {
                 autoplay
                 className="mySwiper"
               >
-                {popularCourses.length
-                  ? popularCourses.map((course) => (
-                      <SwiperSlide key={course._id}>
+                {popularCourses?.length
+                  ? popularCourses?.map((course) => (
+                      <SwiperSlide key={course?._id}>
                         <CourseBox
-                          title={course.name}
-                          href={course.shortName}
+                          title={course?.name}
+                          href={course?.shortName}
                           width={"100%"}
-                          teacher={course.creator}
-                          coursePrice={course.price}
-                          score={course.courseAverageScore}
-                          img={`http://localhost:4000/courses/covers/${course.cover}`}
+                          teacher={course?.creator}
+                          coursePrice={course?.price}
+                          score={course?.courseAverageScore}
+                          img={`http://localhost:4000/courses/covers/${course?.cover}`}
                         />
                       </SwiperSlide>
                     ))
