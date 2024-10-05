@@ -1,0 +1,53 @@
+[33mcommit 2f5171e7fd3751f94b8abf5290f54529664447a9[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mmaster[m[33m, [m[1;31morigin/master[m[33m)[m
+Author: mohammad <mohammadakhlaghi843@gmail.com>
+Date:   Thu Oct 3 14:12:39 2024 +0200
+
+    get and show All Articles in articles pge
+
+[33mcommit 6c7d24d7340ac0bac31a28687936e28e1b77254b[m
+Author: mohammad <mohammadakhlaghi843@gmail.com>
+Date:   Thu Oct 3 12:18:10 2024 +0200
+
+    handled pagination in courses and categories page
+
+[33mcommit 46440974bca5a7963c9761556be136012b226fe0[m
+Author: mohammad <mohammadakhlaghi843@gmail.com>
+Date:   Thu Oct 3 10:15:30 2024 +0200
+
+    get all courses and category courses
+
+[33mcommit 219dc67872f1cb4430705214f863c0471779c908[m
+Author: mohammad <mohammadakhlaghi843@gmail.com>
+Date:   Wed Oct 2 18:13:01 2024 +0200
+
+    get all courses and category courses and fixing re-rendering bug
+
+[33mcommit 6f38c437ff446990d4877bbe3d8239e6d6c9efd5[m
+Author: mohammad <mohammadakhlaghi843@gmail.com>
+Date:   Wed Oct 2 16:51:55 2024 +0200
+
+    handled course infos and submitting comments
+
+[33mcommit 5b1209d1de414c8ec262ad3678cf1094335fff38[m
+Author: mohammad <mohammadakhlaghi843@gmail.com>
+Date:   Sun Sep 29 23:14:21 2024 +0200
+
+    added Google Recaptha to login page and shuffled topbar items
+
+[33mcommit 3fa1deaa18420351c19d20fd3a39f14b4c8d2c17[m
+Author: mohammad <mohammadakhlaghi843@gmail.com>
+Date:   Sun Sep 29 21:42:46 2024 +0200
+
+    login and register page handled and auth Context handled
+
+[33mcommit e2ecaef225273ee8a878ff53e0bf9fa3808d03a0[m
+Author: mohammad <mohammadakhlaghi843@gmail.com>
+Date:   Fri Sep 27 18:16:41 2024 +0200
+
+    added new backend and postman file
+
+[33mcommit d80ee3853f0cc2151f9062b0f7ee5765832b847a[m
+Author: mohammad <mohammadakhlaghi843@gmail.com>
+Date:   Fri Sep 27 17:57:20 2024 +0200
+
+    backend added to project

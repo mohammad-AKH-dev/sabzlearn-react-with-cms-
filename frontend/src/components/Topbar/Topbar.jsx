@@ -1,7 +1,8 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
+import { memo } from "react";
 import "./Topbar.css";
-export default function Topbar() {
+export default memo(function Topbar() {
   const [allTopbarLinks, setAllTopbarLinks] = useState([]);
 
   useEffect(() => {
@@ -57,4 +58,4 @@ export default function Topbar() {
       </div>
     </div>
   );
-}
+})

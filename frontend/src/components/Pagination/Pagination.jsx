@@ -12,7 +12,7 @@ export default function Pagination({
 
   const { page } = useParams();
   useEffect(() => {
-    let endIndex = page * itemsCount ? itemsCount : items.length;
+    let endIndex = page * itemsCount;
     let startIndex = endIndex - itemsCount;
     let paginatedCourses = [...items].slice(startIndex, endIndex);
     setShownCourses(paginatedCourses);

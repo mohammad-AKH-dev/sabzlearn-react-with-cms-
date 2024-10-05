@@ -16,7 +16,7 @@ function App() {
     setIsLoggedIn(true);
     setUserInfos(userInfos);
     localStorage.setItem("user", JSON.stringify({ token }));
-  }, []);
+  }, [isLoggedIn]);
 
   const logout = useCallback(() => {
     setToken(null);
@@ -41,7 +41,7 @@ function App() {
           setToken(localStorageData.token)
         })
     }
-  }, [login,isLoggedIn]);
+  }, [login]);
 
   return (
     <AuthContext.Provider

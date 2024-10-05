@@ -81,8 +81,8 @@ export default function Login() {
           })
           .then((res) => {
             if (res.isConfirmed) {
-              navigate("/");
               authContext.login({}, token);
+              navigate("/");
             }
           });
       })
@@ -93,6 +93,7 @@ export default function Login() {
 
   return (
     <>
+      <Topbar/>
       <Navbar />
 
       <section className="login-register">
