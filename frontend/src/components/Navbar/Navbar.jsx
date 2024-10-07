@@ -76,16 +76,23 @@ export default function Navbar() {
             <a href="#" className="main-header__cart-btn">
               <i className="fas fa-shopping-cart main-header__cart-icon"></i>
             </a>
-            <Link
-              to={authContext.isLoggedIn ? "/" : "/login"}
-              className="main-header__profile"
-            >
-              <span className="main-header__profile-text">
-                {authContext.isLoggedIn
-                  ? authContext.userInfos.name
-                  : "ورود | ثبت نام"}
-              </span>
-            </Link>
+            {authContext.isLoggedIn &&
+              authContext.userInfos.role === "ADMIN" && (
+                <Link to={"/p-admin"} className="main-header__profile">
+                  {authContext.userInfos.name}
+                </Link>
+              )}
+            {!authContext.isLoggedIn && (
+              <Link to={"/login"} className="main-header__profile">
+                ورود | ثبت نام
+              </Link>
+            )}
+            {authContext.isLoggedIn &&
+              authContext.userInfos.role === "USER" && (
+                <Link className="main-header__profile" to={"/"}>
+                  {authContext.userInfos.name}
+                </Link>
+              )}
           </div>
         </div>
       </div>
