@@ -1,11 +1,22 @@
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 
 export default function Topbar() {
   const [adminInfo, setAdminInfo] = useState("");
   const [adminNotifications, setAdminNotifications] = useState([]);
   const [isShowAdminNotifications,setIsShowAdminNotifications] = useState(false)
+  
 
+  const seenNotification = useCallback((notificationID) => {
+    
+      fetch(`http://localhost:4000/v1/notifications/see/${notificationID}`,{
+        method:'PUT',
+        headers:{
+          Authorization: `Bearer ${JSON.parse(localStorage.getItem('user').token)}`
+        }
+      }).then(res => res.json())
+        .then(notifications => console.log(notifications))
+  },[])
 
 
   useEffect(() => {
@@ -21,7 +32,7 @@ export default function Topbar() {
         setAdminInfo(adminInfos);
         setAdminNotifications(adminInfos.notifications);
       });
-  }, []);
+  }, [seenNotification]);
 
   return (
     <div className="container-fluid">
@@ -57,7 +68,7 @@ export default function Topbar() {
                         }
                         </span>
                       <label className="switch">
-                        <a href="javascript:void(0)">دیدم !</a>
+                        <a href="javascript:void(0)" onClick={() => seenNotification(notification._id)}>دیدم !</a>
                       </label>
                     </li>
                   ))

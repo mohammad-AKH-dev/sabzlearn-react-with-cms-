@@ -13,6 +13,7 @@ import AdminArticles from "./pages/AdminPanel/Articles/AdminArticles";
 import Users from "./pages/AdminPanel/Users/Users";
 import AdminCourses from "./pages/AdminPanel/Courses/AdminCourses";
 import Menus from "./pages/AdminPanel/Menus/Menus";
+import AdminCategory from "./pages/AdminPanel/Categories/Category";
 
 const routes = [
     {path: '/', element:<Index/>},
@@ -26,11 +27,11 @@ const routes = [
     {path:'/contact',element:<Contact/>},
     {path:'/search/:value', element:<Search/>},
     {path:'/p-admin/*',element:<Admin/>,children:[
-      {path:'home',element:<Admin/>},
       {path:'articles',element:<AdminArticles/>},
       {path:'users',element:<Users/>},
       {path:'courses',element:<AdminCourses/>},
-      {path:'menus',element:<Menus/>}
+      {path:'menus',element:<Menus/>},
+      {path:'category',element:<AdminCategory/>}
     ]}
 ]
 

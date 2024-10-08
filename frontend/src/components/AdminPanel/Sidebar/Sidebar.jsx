@@ -1,7 +1,31 @@
 import './Sidebar.css'
-import {Link, NavLink } from 'react-router-dom';
+import {Link , NavLink, useNavigate } from 'react-router-dom';
+import AuthContext from '../../../context/authContext';
+import { useContext } from 'react';
+import Swal from "sweetalert2";
+import withReactContent from "sweetalert2-react-content";
 
 export default function Sidebar() {
+   const authContext = useContext(AuthContext)
+   const navigate = useNavigate()
+   const mySwal = withReactContent(Swal)
+
+  const logOutUser = (event) => {
+    event.preventDefault()
+    mySwal.fire({
+      title:'آیا از لاگ اوت اطمینان دارید؟',
+      confirmButtonText:'بله',
+      showCancelButton: true,
+      cancelButtonText:'خیر',
+      icon:'warning'
+    }).then(result => {
+      if(result.isConfirmed){
+        authContext.logout()
+        navigate('/')
+      }
+    })
+    
+  }
   return (
     <div id="sidebar" className="col-2">
       <div className="sidebar-header">
@@ -18,7 +42,7 @@ export default function Sidebar() {
       <div className="sidebar-menu">
         <ul>
           <li>
-            <NavLink to="/p-admin/home" >
+            <NavLink to="/p-admin/" >
               <span>صفحه اصلی</span>
             </NavLink>
           </li>
@@ -48,9 +72,14 @@ export default function Sidebar() {
             </NavLink>
           </li>
           <li>
-            <NavLink to="/p-admin">
+            <NavLink to="/p-admin/category">
               <span>دسته‌بندی‌ها</span>
             </NavLink>
+          </li>
+          <li>
+            <Link  onClick={(event) => logOutUser(event)}>
+              <span>خروج</span>
+            </Link>
           </li>
         </ul>
       </div>

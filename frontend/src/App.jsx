@@ -8,6 +8,7 @@ function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(null);
   const [token, setToken] = useState(null);
   const [userInfos, setUserInfos] = useState(false);
+  
 
   const router = useRoutes(routes);
 
@@ -40,6 +41,8 @@ function App() {
           setUserInfos(result)
           setToken(localStorageData.token)
         })
+    }else{
+      setIsLoggedIn(false)
     }
   }, [login]);
 

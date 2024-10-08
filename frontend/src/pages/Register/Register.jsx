@@ -8,12 +8,14 @@ import Topbar from "../../Components/Topbar/Topbar";
 import { useForm } from "../../hooks/useForm";
 import { requiredValidator,minValidator,maxValidator,emailValidator } from "../../Components/validators/rules";
 import AuthContext from "../../context/authContext";
+import Swal from "sweetalert2";
+import withReactContent from "sweetalert2-react-content";
 import "./Register.css";
 
 export default function Register() {
 
   const authContext = useContext(AuthContext)
-
+  const mySwal = withReactContent(Swal)
    
    
   const [formState,onInputHandler] = useForm({
@@ -32,6 +34,10 @@ export default function Register() {
     password:{
       value:'',
       isValid:false
+    },
+    phone:{
+      value:'',
+      isValid:false
     }
   },false)
   
@@ -44,6 +50,7 @@ export default function Register() {
       username: formState.inputs.username.value,
       email: formState.inputs.email.value,
       password: formState.inputs.password.value,
+      phone:formState.inputs.phone.value,
       confirmPassword:formState.inputs.password.value,
     }
 
@@ -54,7 +61,19 @@ export default function Register() {
           "Content-type": 'application/json'
         },
         body: JSON.stringify(newUserInfos)
-      }).then(res => res.json())
+      }).then(res => {
+         if(res.ok){
+          return res.json()
+         }else{
+          if(res.status === 403){
+            mySwal.fire({
+              title:'این شماره تماس مسدود شده',
+              confirmButtonText:'ای بابا',
+              icon:'error'
+            })
+          }
+         }
+      })
         .then(result => {
           console.log(result.accessToken)
           authContext.login(result.user,result.accessToken)
@@ -107,6 +126,19 @@ export default function Register() {
                 validations={[
                   requiredValidator(),
                   minValidator(4),
+                ]}
+              />
+              <Input
+                type="text"
+                id='phone'
+                placeholder="شماره تماس"
+                className="login-form__username-input"
+                element="input"
+                onInputHandler={onInputHandler}
+                validations={[
+                  requiredValidator(),
+                  minValidator(10),
+                  maxValidator(12)
                 ]}
               />
               <i className="login-form__username-icon fa fa-user"></i>
