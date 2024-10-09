@@ -2,14 +2,42 @@ import { useEffect, useState } from "react";
 import DataTable from "../../../Components/AdminPanel/DataTable/DataTable";
 import Swal from "sweetalert2";
 import withReactContent from "sweetalert2-react-content";
+import { useForm } from "../../../hooks/useForm";
+import Input from "../../../Components/Form/Input";
+import { requiredValidator,minValidator,maxValidator } from "../../../Components/validators/rules";
 
 import './Courses.css'
 
 export default function AdminCourses() {
   const [courses, setCourses] = useState([]);
-  const [courseCategory, setCourseCategory] = useState("");
+  const [courseCategory, setCourseCategory] = useState("6345cbd132c10de974957632");
   const [categories, setCategories] = useState([]);
+  const [courseStatus,setCourseStatus] = useState('start')
+  const [courseCover,setCourseCover] = useState('')
   const mySwal = withReactContent(Swal);
+
+  const [formState,onInputHandler] = useForm({
+    name:{
+      value:'',
+      isValid:false
+    },
+    description:{
+      value:'',
+      isValid:false
+    },
+    shortName:{
+      value:'',
+      isValid:false
+    },
+    price:{
+      value:'',
+      isValid:false
+    },
+    support:{
+      value:'',
+      isValid:false
+    }
+  },false)
 
   useEffect(() => {
     getAndShowAllCourses();
@@ -68,54 +96,119 @@ export default function AdminCourses() {
     setCourseCategory(event.target.value);
   };
 
+  const addNewCourse = (event) => {
+    event.preventDefault()
+    let formData = new FormData()
+    formData.append('name',formState.inputs.name.value)
+    formData.append('description',formState.inputs.description.value)
+    formData.append('shortName',formState.inputs.shortName.value)
+    formData.append('price',formState.inputs.price.value)
+    formData.append('support',formState.inputs.support.value)
+    formData.append('status',courseStatus)
+    formData.append('cover',courseCover)
+    formData.append('categoryID',courseCategory)
+
+    fetch('http://localhost:4000/v1/courses',{
+      method:"POST",
+      headers:{
+        Authorization: `Bearer ${JSON.parse(localStorage.getItem('user')).token}` 
+      },
+      body:formData
+    }).then(res => {
+      if(res.ok){
+          mySwal.fire({
+            title:'دوره با موفقیت به سایت اضافه شد',
+            icon:'success',
+            confirmButtonText:'بسیار هم عالی'
+          }).then(result => {
+            if(result.isConfirmed){
+              getAndShowAllCourses()
+            }
+          })
+      }else{
+        mySwal.fire({
+          title:'مشکلی در اضافه کردن دوره جدید وجود دارد',
+          icon:'error',
+          confirmButtonText:'ای بابا'
+        })
+      }
+    })
+  }
+
   return (
     <>
       <div className="container-fluid" id="home-content">
         <div className="container">
           <div className="home-title">
-            <span>افزودن محصول جدید</span>
+            <span>افزودن دوره جدید</span>
           </div>
           <form className="form">
             <div className="col-6">
               <div className="name input">
-                <label className="input-title">نام محصول</label>
-                <input
+                <label className="input-title">نام دوره</label>
+                <Input
                   type="text"
-                  
-                  placeholder="لطفا نام محصول را وارد کنید..."
+                  id='name'
+                  validations={[minValidator(5)]}
+                  element='input'
+                  onInputHandler={onInputHandler}
+                  placeholder="لطفا نام دوره را وارد کنید..."
                 />
                 <span className="error-message text-danger"></span>
               </div>
             </div>
             <div className="col-6">
               <div className="price input">
-                <label className="input-title">قیمت محصول</label>
-                <input
+                <label className="input-title">توضیحات دوره</label>
+                <Input
                   type="text"
-                  
-                  placeholder="لطفا قیمت محصول را وارد کنید..."
+                  id='description'
+                  validations={[minValidator(5)]}
+                  element='input'
+                  onInputHandler={onInputHandler}
+                  placeholder="لطفا توضیحات دوره را وارد کنید..."
                 />
                 <span className="error-message text-danger"></span>
               </div>
             </div>
             <div className="col-6">
               <div className="number input">
-                <label className="input-title">تعداد محصول</label>
-                <input
+                <label className="input-title">url دوره</label>
+                <Input
                   type="text"
-                  
-                  placeholder="لطفا تعداد محصول را وارد کنید..."
+                  validations={[minValidator(5)]}
+                  onInputHandler={onInputHandler}
+                  element='input'
+                  id='shortName'
+                  placeholder="لطفا url دوره را وارد کنید..."
                 />
                 <span className="error-message text-danger"></span>
               </div>
             </div>
             <div className="col-6">
               <div className="price input">
-                <label className="input-title">قیمت محصول</label>
-                <input
+                <label className="input-title">قیمت دوره</label>
+                <Input
                   type="text"
-                  
-                  placeholder="لطفا قیمت محصول را وارد کنید..."
+                  validations={[minValidator(5)]}
+                  onInputHandler={onInputHandler}
+                  element='input'
+                  id='price'
+                  placeholder="لطفا قیمت دوره را وارد کنید..."
+                />
+                <span className="error-message text-danger"></span>
+              </div>
+            </div>
+            <div className="col-6">
+              <div className="support input">
+                <label className="input-title">پشتیبانی دوره</label>
+                <Input
+                  type="text"
+                  validations={[minValidator(5)]}
+                  onInputHandler={onInputHandler}
+                  element='input'
+                  id='support'
+                  placeholder="لطفا پشتیبانی دوره را وارد کنید..."
                 />
                 <span className="error-message text-danger"></span>
               </div>
@@ -133,67 +226,47 @@ export default function AdminCourses() {
             </div>
             <div className="col-6">
               <div className="file">
-                <label className="input-title">عکس محصول</label>
-                <input type="file" id="file" />
+                <label className="input-title">عکس دوره</label>
+                <input type="file" id="file" onChange={(event) => setCourseCover(event.target.files[0])} />
               </div>
             </div>
             <div className="col-12">
               <div className="bottom-form">
                 <div className="condition">
-                  <label className="input-title">موجودی</label>
+                  <label className="input-title">وضعیت</label>
                   <div className="radios">
                     <div className="available">
                       <label>
-                        <span>موجود</span>
+                        <span>در حال برگزاری</span>
                         <input
                           type="radio"
                           value="avalibe"
                           name="condition"
-                          checked
+                          checked={courseStatus === 'start' ? true : false}
+                          onClick={() => setCourseStatus('start')}
                         />
                       </label>
                     </div>
                     <div className="unavailable">
                       <label>
-                        <span>ناموجود</span>
+                        <span>پیش فروش</span>
                         <input
                           type="radio"
                           value="unavailable"
                           name="condition"
+                          checked={courseStatus === 'presell' ? true : false}
+                          onClick={() => setCourseStatus('presell')}
                         />
                       </label>
                     </div>
                   </div>
                 </div>
                 <div className="submit-btn">
-                  <input type="submit" value="افزودن" />
+                  <input type="submit" value="افزودن" onClick={(event) => addNewCourse(event)} />
                 </div>
               </div>
             </div>
-            <div className="col-6">
-              <div className="presell">
-                <label className="input-title">وضعیت دوره</label>
-                <div className="radios">
-                  <div className="presell-true">
-                    <label>
-                      <span>پیش فروش</span>
-                      <input
-                        type="radio"
-                        value="presell"
-                        name="presell"
-                        checked
-                      />
-                    </label>
-                  </div>
-                  <div className="presell-false">
-                    <label>
-                      <span>در حال برگزاری</span>
-                      <input type="radio" value="onperforming" name="presell" />
-                    </label>
-                  </div>
-                </div>
-              </div>
-            </div>
+            
           </form>
         </div>
       </div>

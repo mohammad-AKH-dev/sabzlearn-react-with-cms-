@@ -34,6 +34,7 @@ export default function CourseInfo() {
       })
         .then((res) => res.json())
         .then((courseInfo) => {
+          console.log(courseInfo)
           setComments(courseInfo.comments);
           setSessions(courseInfo.sessions);
           setCreatedAt(courseInfo.createdAt);
@@ -145,7 +146,7 @@ export default function CourseInfo() {
             <div className="col-6">
               <video
                 src=""
-                poster="/images/courses/js_project.png"
+                poster={`http://localhost:4000/courses/covers/${courseDetails.cover}`}
                 className="course-info__video"
                 controls
               ></video>
