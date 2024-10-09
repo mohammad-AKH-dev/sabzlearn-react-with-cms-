@@ -116,9 +116,9 @@ export default function CourseInfo() {
         <div className="container">
           <div className="row">
             <div className="col-6">
-              <a href="#" className="course-info__link">
-                آموزش برنامه نویسی فرانت اند
-              </a>
+              <Link to={`/category-info/${courseDetails?.categoryID?.name}/1`} className="course-info__link">
+                {`${courseDetails?.categoryID?.title}`}
+              </Link>
               <h1 className="course-info__title">
                 {!courseDetails.message
                   ? courseDetails.name

@@ -36,8 +36,11 @@ export default function PopularCourses() {
                 pagination={true}
                 slidesPerView={3}
                 spaceBetween={20}
-                loop
-                autoplay
+                loop={true}
+                autoplay={{
+                  delay:3000,
+                  disableOnInteraction:false
+                }}
                 className="mySwiper"
               >
                 {popularCourses?.length
