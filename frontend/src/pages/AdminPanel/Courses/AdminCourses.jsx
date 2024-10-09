@@ -10,7 +10,7 @@ import './Courses.css'
 
 export default function AdminCourses() {
   const [courses, setCourses] = useState([]);
-  const [courseCategory, setCourseCategory] = useState("6345cbd132c10de974957632");
+  const [courseCategory, setCourseCategory] = useState("-1");
   const [categories, setCategories] = useState([]);
   const [courseStatus,setCourseStatus] = useState('start')
   const [courseCover,setCourseCover] = useState('')
@@ -108,31 +108,40 @@ export default function AdminCourses() {
     formData.append('cover',courseCover)
     formData.append('categoryID',courseCategory)
 
-    fetch('http://localhost:4000/v1/courses',{
-      method:"POST",
-      headers:{
-        Authorization: `Bearer ${JSON.parse(localStorage.getItem('user')).token}` 
-      },
-      body:formData
-    }).then(res => {
-      if(res.ok){
+    if(courseCategory === '-1'){
+      mySwal.fire({
+        title:'لطفا دسته بندی دوره را انتخاب کنید',
+        icon:'warning',
+        confirmButtonText:'اوکی'
+      })
+    }else{
+      fetch('http://localhost:4000/v1/courses',{
+        method:"POST",
+        headers:{
+          Authorization: `Bearer ${JSON.parse(localStorage.getItem('user')).token}` 
+        },
+        body:formData
+      }).then(res => {
+        if(res.ok){
+            mySwal.fire({
+              title:'دوره با موفقیت به سایت اضافه شد',
+              icon:'success',
+              confirmButtonText:'بسیار هم عالی'
+            }).then(result => {
+              if(result.isConfirmed){
+                getAndShowAllCourses()
+              }
+            })
+        }else{
           mySwal.fire({
-            title:'دوره با موفقیت به سایت اضافه شد',
-            icon:'success',
-            confirmButtonText:'بسیار هم عالی'
-          }).then(result => {
-            if(result.isConfirmed){
-              getAndShowAllCourses()
-            }
+            title:'مشکلی در اضافه کردن دوره جدید وجود دارد',
+            icon:'error',
+            confirmButtonText:'ای بابا'
           })
-      }else{
-        mySwal.fire({
-          title:'مشکلی در اضافه کردن دوره جدید وجود دارد',
-          icon:'error',
-          confirmButtonText:'ای بابا'
-        })
-      }
-    })
+        }
+      })
+    }
+
   }
 
   return (
@@ -217,6 +226,7 @@ export default function AdminCourses() {
               <div className="number input">
                 <label className="input-title">دسته‌بندی دوره</label>
                 <select onChange={selectCategory}>
+                  <option value={'-1'}>لطفا دسته بندی را انتخاب کنید</option>
                   {categories.map((category) => (
                     <option key={category._id} value={category._id}>{category.title}</option>
                   ))}
