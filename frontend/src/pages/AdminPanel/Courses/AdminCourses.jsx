@@ -3,8 +3,8 @@ import DataTable from "../../../Components/AdminPanel/DataTable/DataTable";
 import Swal from "sweetalert2";
 import withReactContent from "sweetalert2-react-content";
 import { useForm } from "../../../hooks/useForm";
-import Input from "../../../Components/Form/Input";
-import { requiredValidator,minValidator,maxValidator } from "../../../Components/validators/rules";
+import Input from "../../../components/Form/Input";
+import { minValidator } from "../../../components/validators/rules";
 
 import './Courses.css'
 

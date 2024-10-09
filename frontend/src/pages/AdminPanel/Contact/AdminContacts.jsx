@@ -62,6 +62,37 @@ export default function AdminContacts() {
       });
   };
 
+  const removeContact = (contactID) => {
+    mySwal.fire({
+      title:'آیا از حذف این پیغام اطمینان دارید?',
+      icon:'warning',
+      confirmButtonText:'بله',
+      cancelButtonText:'خیر',
+      showCancelButton:true
+    }).then(result => {
+      if(result.isConfirmed){
+        fetch(`http://localhost:4000/v1/contact/${contactID}`,{
+          method:'DELETE',
+          headers:{
+            Authorization: `Bearer ${JSON.parse(localStorage.getItem('user')).token}`
+          }
+        }).then(res => {
+          if(res.ok){
+            mySwal.fire({
+              title:'پیغام با موفقیت حذف شد',
+              icon:'success',
+              confirmButtonText:'ایول'
+            }).then(result => {
+              if(result.isConfirmed){
+                getAndShowContacts()
+              }
+            })
+          }
+        })
+      }
+    })
+  }
+
   return (
     <>
       <DataTable title="پیغام‌ها">
@@ -109,7 +140,7 @@ export default function AdminContacts() {
                   )}
                 </td>
                 <td>
-                  <button type="button" className="btn btn-danger delete-btn">
+                  <button type="button" className="btn btn-danger delete-btn" onClick={() => removeContact(contact._id)}>
                     حذف
                   </button>
                 </td>
