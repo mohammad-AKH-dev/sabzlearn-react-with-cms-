@@ -44,6 +44,13 @@ export default function CourseInfo() {
         });
   }, [params.courseName]);
 
+  function formatTime(number) {
+    const str = number.toString();
+    const hours = str.length === 4 ? str.slice(0, 2) : '0' + str[0];
+    const minutes = str.slice(-2);
+    return `${hours}:${minutes}`;
+}
+
   const submitComment = async (e) => {
     e.preventDefault()
 
@@ -304,7 +311,7 @@ export default function CourseInfo() {
                           </div>
                           <div className="introduction__accordion-left">
                             <span className="introduction__accordion-time">
-                              {courseDetails.isUserRegisteredToThisCourse === 1 ? session.time : <i className="fa-solid fa-lock"></i>}
+                              {courseDetails.isUserRegisteredToThisCourse === 1 ? formatTime(session.time) : <i className="fa-solid fa-lock"></i>}
                             </span>
                           </div>
                         </Accordion.Body>

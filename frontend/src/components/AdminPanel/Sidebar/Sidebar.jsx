@@ -82,6 +82,11 @@ export default function Sidebar() {
             </NavLink>
           </li>
           <li>
+            <NavLink to="/p-admin/sessions">
+              <span>جلسات</span>
+            </NavLink>
+          </li>
+          <li>
             <Link  onClick={(event) => logOutUser(event)}>
               <span>خروج</span>
             </Link>

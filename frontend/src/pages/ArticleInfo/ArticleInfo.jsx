@@ -3,6 +3,7 @@ import CommentsTextArea from "../../components/CommentsTextArea/CommentsTextArea
 import Topbar from '../../components/Topbar/Topbar'
 import Navbar from '../../components/Navbar/Navbar'
 import Footer from '../../components/Footer/Footer'
+import DOMPurify from 'dompurify';
 
 import "./ArticleInfo.css";
 import { useEffect, useState } from "react";
@@ -14,6 +15,7 @@ export default function ArticleInfo() {
   const [articleCategory,setArticleCategory] = useState(null)
   const [articleCreator,setArticleCreator] = useState(null)
   const [articleCreateDate,setArticleCreateDate] = useState(null)
+  const [articleBody,setArticleBody] = useState('')
   const [articleDesc,setArticleDesc] = useState(null)
 
   const {articleName} = useParams()
@@ -29,6 +31,7 @@ export default function ArticleInfo() {
         setArticleCategory(infos.categoryID)
         setArticleCreator(infos.creator.name)
         setArticleCreateDate(infos.createdAt)
+        setArticleBody(infos.body)
       })
   },[])
 
@@ -157,68 +160,8 @@ export default function ArticleInfo() {
                   </ul>
                 </div>
 
-                <img
-                  src="/images/blog/2.jpg"
-                  alt="Article Image"
-                  className="article__seconadary-banner"
-                />
-                <div className="article-section">
-                  <h2 className="article-section__title">
-                    معرفی بهترین سایت ‌های آموزش جاوا اسکریپت:
-                  </h2>
-                  <p className="paragraph article-section__text">
-                    توجه داشته باشید که تمام وب سایت‌هایی که به عنوان بهترین
-                    سایت آموزش جاوا اسکریپت در ادامه معرفی می‌کنیم، بین‌المللی
-                    هستند و منابع موجود در آن‌ها به زبان انگلیسی است. در نتیجه
-                    شما باید یا تسلط متوسط و حداقلی به زبان انگلیسی داشته باشید
-                    و یا اینکه با استفاده از گوگل ترنسلیت منابع موجود را ترجمه
-                    کرده و از آن‌ها استفاده کنید. به همین دلیل در انتهای محتوا
-                    به شما خواهیم گفت که راه آسان دیگری برای یادگیری زبان جاوا
-                    اسکریپت وجود دارد که شما بتوانید به واسطه آن به صورت رایگان
-                    و به زبان فارسی این زبان را یاد بگیرید.
-                  </p>
-                  <img
-                    src="/images/blog/4.png"
-                    alt="article body img"
-                    className="article-section__img"
-                  />
-                </div>
-                <div className="article-section">
-                  <h2 className="article-section__title">
-                    معرفی بهترین سایت ‌های آموزش جاوا اسکریپت:
-                  </h2>
-                  <p className="paragraph article-section__text">
-                    توجه داشته باشید که تمام وب سایت‌هایی که به عنوان بهترین
-                    سایت آموزش جاوا اسکریپت در ادامه معرفی می‌کنیم، بین‌المللی
-                    هستند و منابع موجود در آن‌ها به زبان انگلیسی است. در نتیجه
-                    شما باید یا تسلط متوسط و حداقلی به زبان انگلیسی داشته باشید
-                    و یا اینکه با استفاده از گوگل ترنسلیت منابع موجود را ترجمه
-                    کرده و از آن‌ها استفاده کنید. به همین دلیل در انتهای محتوا
-                    به شما خواهیم گفت که راه آسان دیگری برای یادگیری زبان جاوا
-                    اسکریپت وجود دارد که شما بتوانید به واسطه آن به صورت رایگان
-                    و به زبان فارسی این زبان را یاد بگیرید.
-                  </p>
-                </div>
-                <div className="article-section">
-                  <h2 className="article-section__title">
-                    معرفی بهترین سایت ‌های آموزش جاوا اسکریپت:
-                  </h2>
-                  <p className="paragraph article-section__text">
-                    توجه داشته باشید که تمام وب سایت‌هایی که به عنوان بهترین
-                    سایت آموزش جاوا اسکریپت در ادامه معرفی می‌کنیم، بین‌المللی
-                    هستند و منابع موجود در آن‌ها به زبان انگلیسی است. در نتیجه
-                    شما باید یا تسلط متوسط و حداقلی به زبان انگلیسی داشته باشید
-                    و یا اینکه با استفاده از گوگل ترنسلیت منابع موجود را ترجمه
-                    کرده و از آن‌ها استفاده کنید. به همین دلیل در انتهای محتوا
-                    به شما خواهیم گفت که راه آسان دیگری برای یادگیری زبان جاوا
-                    اسکریپت وجود دارد که شما بتوانید به واسطه آن به صورت رایگان
-                    و به زبان فارسی این زبان را یاد بگیرید.
-                  </p>
-                  <img
-                    src="/images/blog/3.jpg"
-                    alt="article body img"
-                    className="article-section__img"
-                  />
+                <div className="article-section" dangerouslySetInnerHTML={{__html:DOMPurify.sanitize(articleBody)}}>
+
                 </div>
 
                 <div className="article-social-media">
