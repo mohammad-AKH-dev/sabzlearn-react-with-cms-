@@ -7,98 +7,101 @@ import Accordion from "react-bootstrap/Accordion";
 import Topbar from "../../components/Topbar/Topbar";
 import Navbar from "../../components/Navbar/Navbar";
 import Footer from "../../components/Footer/Footer";
-import Swal from 'sweetalert2'
-import withReactContent from 'sweetalert2-react-content'
-import {  useContext, useEffect, useState } from "react";
-import { useParams , Link} from "react-router-dom";
+import Swal from "sweetalert2";
+import withReactContent from "sweetalert2-react-content";
+import { useContext, useEffect, useState } from "react";
+import { useParams, Link } from "react-router-dom";
 
 export default function CourseInfo() {
   const [comments, setComments] = useState([]);
   const [sessions, setSessions] = useState([]);
   const [createdAt, setCreatedAt] = useState("");
-  const [score,setScore] = useState(5)
+  const [score, setScore] = useState(5);
   const [updatedAt, setUpdatedAt] = useState("");
   const [courseDetails, setCourseDetails] = useState({});
-  const [newComment,setNewComment] = useState('')
-  const [courseTeacherInfos,setCourseTeacherInfos] = useState({})
-  const authContext = useContext(AuthContext)
-  const MySwal = withReactContent(Swal)
+  const [newComment, setNewComment] = useState("");
+  const [courseTeacherInfos, setCourseTeacherInfos] = useState({});
+  const authContext = useContext(AuthContext);
+  const MySwal = withReactContent(Swal);
   const params = useParams();
 
   useEffect(() => {
-    const localStorageData = JSON.parse(localStorage.getItem('user'))
-    
-      fetch(`http://localhost:4000/v1/courses/${params.courseName}`, {
-        method: "GET",
-        Authorization: `Bearer ${localStorageData ? localStorageData.token : null}`,
-      })
-        .then((res) => res.json())
-        .then((courseInfo) => {
-          console.log(courseInfo)
-          setComments(courseInfo.comments);
-          setSessions(courseInfo.sessions);
-          setCreatedAt(courseInfo.createdAt);
-          setUpdatedAt(courseInfo.updatedAt);
-          setCourseTeacherInfos(courseInfo.creator)
-          setCourseDetails(courseInfo);
-        });
+    const localStorageData = JSON.parse(localStorage.getItem("user"));
+
+    fetch(`http://localhost:4000/v1/courses/${params.courseName}`, {
+      method: "GET",
+      Authorization: `Bearer ${
+        localStorageData ? localStorageData.token : null
+      }`,
+    })
+      .then((res) => res.json())
+      .then((courseInfo) => {
+        console.log(courseInfo);
+        setComments(courseInfo.comments);
+        setSessions(courseInfo.sessions);
+        setCreatedAt(courseInfo.createdAt);
+        setUpdatedAt(courseInfo.updatedAt);
+        setCourseTeacherInfos(courseInfo.creator);
+        setCourseDetails(courseInfo);
+      });
   }, [params.courseName]);
 
   function formatTime(number) {
     const str = number.toString();
-    const hours = str.length === 4 ? str.slice(0, 2) : '0' + str[0];
+    const hours = str.length === 4 ? str.slice(0, 2) : "0" + str[0];
     const minutes = str.slice(-2);
     return `${hours}:${minutes}`;
-}
+  }
 
   const submitComment = async (e) => {
-    e.preventDefault()
+    e.preventDefault();
 
-     if(newComment.length) {
-       let commentDetails = {
-         body:newComment,
-         courseShortName:params.courseName,
-         score
-       }
+    if (newComment.length) {
+      let commentDetails = {
+        body: newComment,
+        courseShortName: params.courseName,
+        score,
+      };
 
-       const res = await fetch('http://localhost:4000/v1/comments',{
-         method:'POST',
-         headers:{
-           Authorization:`Bearer ${authContext.token}`,
-           "Content-type": 'application/json'
-         },
-         body: JSON.stringify(commentDetails)
-       })
-       console.log(res)
-       if(res.ok){
-         MySwal.fire({
-          title:'کامنت با موفقیت ثبت شد:)',
-          icon:'success',
-          timer:2000,
-          confirmButtonText:'بسیار هم عالی',
-         }).then(() => {
-          const localStorageData = JSON.parse(localStorage.getItem('user'))
+      const res = await fetch("http://localhost:4000/v1/comments", {
+        method: "POST",
+        headers: {
+          Authorization: `Bearer ${authContext.token}`,
+          "Content-type": "application/json",
+        },
+        body: JSON.stringify(commentDetails),
+      });
+      console.log(res);
+      if (res.ok) {
+        MySwal.fire({
+          title: "کامنت با موفقیت ثبت شد:)",
+          icon: "success",
+          timer: 2000,
+          confirmButtonText: "بسیار هم عالی",
+        }).then(() => {
+          const localStorageData = JSON.parse(localStorage.getItem("user"));
           fetch(`http://localhost:4000/v1/courses/${params.courseName}`, {
             method: "GET",
-            Authorization: `Bearer ${localStorageData ? localStorageData.token : null}`,
+            Authorization: `Bearer ${
+              localStorageData ? localStorageData.token : null
+            }`,
           })
             .then((res) => res.json())
             .then((courseInfo) => {
               setComments(courseInfo.comments);
-              setNewComment('')
+              setNewComment("");
             });
-         })
-       }else{
+        });
+      } else {
         MySwal.fire({
-          title:'مشکلی در ثبت کامنت پیش آمده',
-          icon:'error',
-          timer:2000,
-          confirmButtonText:'متوجه شدم'
-       })
-     }
-  }
-}
-
+          title: "مشکلی در ثبت کامنت پیش آمده",
+          icon: "error",
+          timer: 2000,
+          confirmButtonText: "متوجه شدم",
+        });
+      }
+    }
+  };
 
   return (
     <>
@@ -124,7 +127,10 @@ export default function CourseInfo() {
         <div className="container">
           <div className="row">
             <div className="col-6">
-              <Link to={`/category-info/${courseDetails?.categoryID?.name}/1`} className="course-info__link">
+              <Link
+                to={`/category-info/${courseDetails?.categoryID?.name}/1`}
+                className="course-info__link"
+              >
                 {`${courseDetails?.categoryID?.title}`}
               </Link>
               <h1 className="course-info__title">
@@ -292,31 +298,93 @@ export default function CourseInfo() {
                   </div>
 
                   <div className="introduction__topic">
-                    <Accordion defaultActiveKey='1'>
+                    <Accordion defaultActiveKey="1">
                       <Accordion.Item className="accordion" eventKey="1">
                         <Accordion.Header>جلسات دوره</Accordion.Header>
-                      {sessions?.length ? sessions?.map((session,index) => (
-                        <Accordion.Body key={session._id} className="accordion-body introduction__accordion-body">
+                        {sessions.length
+                          ? sessions.map((session, index) => 
+                              
+                                (session.free === 1 || courseDetails.isUserRegisteredToThisCourse) ? (
+                                  <Accordion.Body
+                                     key={session._id}
+                                     className="accordion-body introduction__accordion-body"
+                                   >
+                                     <div className="introduction__accordion-right">
+                                       <span className="introduction__accordion-count">
+                                         {index + 1}
+                                       </span>
+                                       <i className="fab fa-youtube introduction__accordion-icon"></i>
+                                       <Link
+                                         to={`/${params.courseName}/${session._id}`}
+                                         className="introduction__accordion-link"
+                                       >
+                                         {session.title}
+                                       </Link>
+                                     </div>
+                                     <div className="introduction__accordion-left">
+                                       <span className="introduction__accordion-time">
+                                         {formatTime(session.time)}
+                                       </span>
+                                     </div>
+                                   </Accordion.Body>
+                                ) : (
+                                  <Accordion.Body
+                                     key={session._id}
+                                     className="accordion-body introduction__accordion-body"
+                                   >
+                                     <div className="introduction__accordion-right">
+                                       <span className="introduction__accordion-count">
+                                         {index + 1}
+                                       </span>
+                                       <i className="fab fa-youtube introduction__accordion-icon"></i>
+                                       <span
+                                         className="introduction__accordion-link"
+                                       >
+                                         {session.title}
+                                       </span>
+                                     </div>
+                                     <div className="introduction__accordion-left">
+                                       <span className="introduction__accordion-time">
+                                       <i className="fa-solid fa-lock"></i>
+                                       </span>
+                                     </div>
+                                   </Accordion.Body>
+                                )
+                              
+                            )
+                          : null}
+
+                        {/* <Accordion.Body
+                          key={session._id}
+                          className="accordion-body introduction__accordion-body"
+                        >
                           <div className="introduction__accordion-right">
                             <span className="introduction__accordion-count">
                               {index + 1}
                             </span>
                             <i className="fab fa-youtube introduction__accordion-icon"></i>
                             <Link
-                              to={courseDetails.isUserRegisteredToThisCourse === 1 ? session.href : 'javascript:void()'}
+                              to={
+                                courseDetails.isUserRegisteredToThisCourse === 1
+                                  ? session.href
+                                  : "javascript:void()"
+                              }
                               className="introduction__accordion-link"
                             >
-                             {session.title}
+                              {session.title}
                             </Link>
                           </div>
                           <div className="introduction__accordion-left">
                             <span className="introduction__accordion-time">
-                              {courseDetails.isUserRegisteredToThisCourse === 1 ? formatTime(session.time) : <i className="fa-solid fa-lock"></i>}
+                              {courseDetails.isUserRegisteredToThisCourse ===
+                              1 ? (
+                                formatTime(session.time)
+                              ) : (
+                                <i className="fa-solid fa-lock"></i>
+                              )}
                             </span>
                           </div>
-                        </Accordion.Body>
-                      )):<p className="alert alert-danger">جلسه ای برای این دوره وجود ندارد</p>}
-                      
+                        </Accordion.Body> */}
                       </Accordion.Item>
                     </Accordion>
                   </div>
@@ -355,7 +423,13 @@ export default function CourseInfo() {
                 </div>
 
                 {/* Finish Teacher Details */}
-                <CommentsTextArea comments={comments} setComments={setComments} newComment={newComment} setNewComment={setNewComment} submitComment={submitComment}/>
+                <CommentsTextArea
+                  comments={comments}
+                  setComments={setComments}
+                  newComment={newComment}
+                  setNewComment={setNewComment}
+                  submitComment={submitComment}
+                />
               </div>
             </div>
 

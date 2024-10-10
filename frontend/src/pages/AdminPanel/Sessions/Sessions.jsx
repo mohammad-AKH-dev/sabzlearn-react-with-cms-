@@ -11,6 +11,7 @@ export default function Sessions() {
   const [allSessions,setAllSessions] = useState([])
   const [sessionCourse, setSessionCourse] = useState('-1');
   const [sessionVideo,setSessionVideo] = useState(null)
+  const [isSessionFree,setIsSessionFree] = useState(0)
   const mySwal = withReactContent(Swal)
   const [formState, onInputHandler] = useForm(
     {
@@ -57,7 +58,7 @@ export default function Sessions() {
     formData.append('title',formState.inputs.title.value)
     formData.append('time',formState.inputs.time.value)
     formData.append('video',sessionVideo)
-    formData.append('free','1')
+    formData.append('free',isSessionFree)
 
     fetch(`http://localhost:4000/v1/courses/${sessionCourse}/sessions`,{
       method:"POST",
@@ -166,7 +167,38 @@ export default function Sessions() {
                 <span className="error-message text-danger"></span>
               </div>
             </div>
-
+              <div className="col-6">
+              <div className="condition">
+                  <label className="input-title">وضعیت</label>
+                  <div className="radios">
+                    <div className="available">
+                      <label>
+                        <span>رایگان</span>
+                        <input
+                          type="radio"
+                          value="avalibe"
+                          name="condition"
+                          checked={isSessionFree === 1  ? true : false}
+                          onClick={() => setIsSessionFree(1)}
+                          
+                        />
+                      </label>
+                    </div>
+                    <div className="unavailable">
+                      <label>
+                        <span>غیر رایگان</span>
+                        <input
+                          type="radio"
+                          value="unavailable"
+                          name="condition"
+                          checked={isSessionFree === 0 ? true : false}
+                          onClick={() => setIsSessionFree(0)}
+                        />
+                      </label>
+                    </div>
+                  </div>
+                </div>
+              </div>
             <div className="col-12">
               <div className="bottom-form">
                 <div className="submit-btn">

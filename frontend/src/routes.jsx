@@ -1,5 +1,5 @@
 import Index from "./pages/index/Index";
-import Courseinfo from './pages/Courseinfo/Courseinfo'
+import CourseInfo from "./pages/CourseInfo/CourseInfo";
 import Category from './pages/Category/Category'
 import ArticleInfo from "./pages/ArticleInfo/ArticleInfo";
 import Courses from "./pages/Courses/Courses";
@@ -16,10 +16,11 @@ import Menus from "./pages/AdminPanel/Menus/Menus";
 import AdminCategory from "./pages/AdminPanel/Categories/Category";
 import AdminContacts from "./pages/AdminPanel/Contact/AdminContacts";
 import Sessions from "./pages/AdminPanel/Sessions/Sessions";
+import Session from "./pages/Session/Session";
 
 const routes = [
     {path: '/', element:<Index/>},
-    {path:'/course-info/:courseName',element:<Courseinfo/>},
+    {path:'/course-info/:courseName',element:<CourseInfo/>},
     {path:'/category-info/:categoryName/:page',element:<Category/>},
     {path:'/article-info/:articleName',element:<ArticleInfo/>},
     {path:'/courses/:page',element:<Courses/>},
@@ -28,6 +29,7 @@ const routes = [
     {path:'/articles/:page',element:<Articles/>},
     {path:'/contact',element:<Contact/>},
     {path:'/search/:value', element:<Search/>},
+    {path:'/:courseName/:sessionID',element:<Session/>},
     {path:'/p-admin/*',element:<Admin/>,children:[
       {path:'articles',element:<AdminArticles/>},
       {path:'users',element:<Users/>},
