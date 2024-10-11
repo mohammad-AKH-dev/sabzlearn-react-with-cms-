@@ -82,6 +82,11 @@ export default function Sidebar() {
             </NavLink>
           </li>
           <li>
+            <NavLink to="/p-admin/comments">
+              <span>کامنت ها</span>
+            </NavLink>
+          </li>
+          <li>
             <NavLink to="/p-admin/sessions">
               <span>جلسات</span>
             </NavLink>
