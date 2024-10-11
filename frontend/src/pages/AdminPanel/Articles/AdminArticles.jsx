@@ -3,6 +3,7 @@ import DataTable from "../../../Components/AdminPanel/DataTable/DataTable";
 import Swal from "sweetalert2";
 import { useForm } from "../../../hooks/useForm";
 import Input from "../../../components/Form/Input";
+import { Link } from "react-router-dom";
 import { minValidator } from "../../../components/validators/rules";
 import withReactContent from "sweetalert2-react-content";
 import { CKEditor } from "@ckeditor/ckeditor5-react";
@@ -15,7 +16,6 @@ import {
   Paragraph,
   Undo,
   Heading,
-  Link,
   Image,
   ImageUpload,
   BlockQuote,
@@ -137,6 +137,38 @@ export default function Articles() {
     })
   }
 
+  const draftNewArticle = (event) => {
+    event.preventDefault()
+    const localStorageData = JSON.parse(localStorage.getItem('user'))
+    let formData = new FormData()
+    formData.append('title',formState.inputs.title.value)
+    formData.append('shortName',formState.inputs.shortName.value)
+    formData.append('description',formState.inputs.description.value)
+    formData.append('categoryID',articleCategory)
+    formData.append('cover',articleCover)
+    formData.append('body',articleBody)
+
+    fetch('http://localhost:4000/v1/articles/draft',{
+      method:"POST",
+      headers:{
+        Authorization: `Bearer ${localStorageData.token}`
+      },
+      body: formData
+    }).then(res => {
+      if(res.ok){
+        mySwal.fire({
+          title:'مقاله با موفقیت پیش نویس شد',
+          icon:'success',
+          confirmButtonText:'خیلی هم عالی'
+        }).then(result => {
+          if(result.isConfirmed){
+            getAllArticles()
+          }
+        })
+      }
+    })
+  }
+
   return (
     <>
       <div className="container-fluid" id="home-content">
@@ -205,7 +237,6 @@ export default function Articles() {
                       "bold",
                       "italic",
                       "heading",
-                      "link",
                       "uploadImage",
                       "blockQuote",
                       "numberedList",
@@ -221,7 +252,6 @@ export default function Articles() {
                     Undo,
                     Heading,
                     Image,
-                    Link,
                     ImageUpload,
                     BlockQuote,
                     List,
@@ -289,7 +319,8 @@ export default function Articles() {
             <div className="col-12">
               <div className="bottom-form">
                 <div className="submit-btn">
-                  <input type="submit" value="افزودن" onClick={(event) => createNewArticle(event)}/>
+                  <input type="submit" value="انتشار" onClick={(event) => createNewArticle(event)}/>
+                  <input type="submit" value="پیش نویس" style={{marginRight:'15px'}} onClick={(event) => draftNewArticle(event)}/>
                 </div>
               </div>
             </div>
@@ -305,6 +336,8 @@ export default function Articles() {
               <th>عنوان</th>
               <th>لینک</th>
               <th>نویسنده</th>
+              <th>وضعیت</th>
+              <th>مشاهده</th>
               <th>ویرایش</th>
               <th>حذف</th>
             </tr>
@@ -316,6 +349,16 @@ export default function Articles() {
                 <td>{article.title}</td>
                 <td>{article.shortName}</td>
                 <td>{article.creator.name}</td>
+                <td>{article.publish === 1 ? 'منتشر شده' : 'پیش نویس'}</td>
+                <td style={{textAlign:'center'}}>
+                {
+                  article.publish === 1 ? (<i className="fa fa-check"></i>) : (
+                    <Link to={`draft/${article.shortName}`} type="button" className="btn btn-primary edit-btn">
+                    ادامه نوشتن
+                  </Link>
+                  )
+                }
+                </td>
                 <td>
                   <button type="button" className="btn btn-primary edit-btn">
                     ویرایش
