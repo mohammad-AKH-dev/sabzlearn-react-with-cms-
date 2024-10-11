@@ -67,7 +67,7 @@ export default function Sidebar() {
             </NavLink>
           </li>
           <li>
-            <NavLink to="/p-admin">
+            <NavLink to="/p-admin/offs">
               <span>کدهای تخفیف</span>
             </NavLink>
           </li>
