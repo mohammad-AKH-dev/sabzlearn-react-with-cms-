@@ -21,6 +21,8 @@ import Offs from "./pages/AdminPanel/Offs/Offs";
 import Comments from "./pages/AdminPanel/Comments/Comments";
 import Draft from "./pages/AdminPanel/Articles/Draft";
 import PadminPage from "./pages/AdminPanel/Index/Index";
+import Puser from "./pages/UserPanel/Index";
+import UserIndex from "./pages/UserPanel/Index/Index";
 
 const routes = [
     {path: '/', element:<Index/>},
@@ -34,6 +36,10 @@ const routes = [
     {path:'/contact',element:<Contact/>},
     {path:'/search/:value', element:<Search/>},
     {path:'/:courseName/:sessionID',element:<Session/>},
+
+    {path:'/my-account/*',element:<Puser/>,children:[
+      {path:'',element:<UserIndex/>}
+    ]},
 
     {path:'/p-admin/*',element:<Admin/>,children:[
       {path:'',element:<PadminPage/>},

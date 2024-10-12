@@ -89,7 +89,7 @@ export default function Navbar() {
             )}
             {authContext.isLoggedIn &&
               authContext.userInfos.role === "USER" && (
-                <Link className="main-header__profile" to={"/"}>
+                <Link className="main-header__profile" to={"/my-account"}>
                   {authContext.userInfos.name}
                 </Link>
               )}

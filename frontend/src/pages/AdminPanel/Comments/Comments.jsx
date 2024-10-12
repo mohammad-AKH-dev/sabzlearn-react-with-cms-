@@ -114,6 +114,36 @@ export default function Comments() {
         })
       })
     }
+    
+    const filterScore = (score) => {
+      let mainScore = null
+      switch(score){
+        case 5 : {
+          mainScore = 'عالی'
+          break
+        }
+        case 4 : {
+          mainScore = 'خیلی خوب'
+          break
+        }
+        case 3 : {
+          mainScore = 'خوب'
+          break
+        }
+        case 2 : {
+          mainScore = 'ضعیف'
+          break
+        }
+        case 1 : {
+         mainScore = 'بد'
+         break
+        }
+        default:{
+          return mainScore = 'خیلی خوب'
+        }
+      }
+      return mainScore
+    }
 
     const acceptComment = (commentID) => {
          mySwal.fire({
@@ -178,6 +208,7 @@ export default function Comments() {
               <th>شناسه</th>
               <th>کاربر</th>
               <th>دوره</th>
+              <th>امتیاز</th>
               <th>مشاهده</th>
               <th>پاسخ</th>
               <th>تایید</th>
@@ -193,6 +224,9 @@ export default function Comments() {
                 <td>{index + 1}</td>
                 <td>{comment.creator.name}</td>
                 <td>{comment.course}</td>
+                <td style={{textAlign:'center'}}>
+                  {filterScore(comment.score)}
+                </td>
                 <td>
                   <button
                     type="button"
@@ -201,7 +235,7 @@ export default function Comments() {
                   >
                     مشاهده
                   </button>
-                </td>
+                </td>               
                 <td>
                   {
                     comment.answer === 1 ? (
