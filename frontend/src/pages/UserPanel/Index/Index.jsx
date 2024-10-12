@@ -23,10 +23,10 @@ export default function UserIndex() {
         <div className="main__links">
           <div className="row">
             <IndexBox title="سفارش" href="orders" />
-            <IndexBox title="دوره های خریداری شده" href="courses" />
+            <IndexBox title="دوره های خریداری شده" href="buyed" />
             <IndexBox title="کیف پول من" href="money" />
             <IndexBox title="جزئیات حساب کاربری" href="infos" />
-            <IndexBox title="تیکت های پشتیبانی" href="ticket" />
+            <IndexBox title="تیکت های پشتیبانی" href="tickets" />
           </div>
         </div>
       </div>

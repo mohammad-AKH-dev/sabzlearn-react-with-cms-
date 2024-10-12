@@ -23,6 +23,11 @@ import Draft from "./pages/AdminPanel/Articles/Draft";
 import PadminPage from "./pages/AdminPanel/Index/Index";
 import Puser from "./pages/UserPanel/Index";
 import UserIndex from "./pages/UserPanel/Index/Index";
+import Orders from "./pages/UserPanel/Orders/Orders";
+import UserCourses from "./pages/UserPanel/Courses/Courses";
+import SendTicket from "./pages/UserPanel/Tickets/SendTicket";
+import Tickets from "./pages/UserPanel/Tickets/Tickets";
+import TicketAnswer from "./pages/UserPanel/Tickets/TicketAnswer";
 
 const routes = [
     {path: '/', element:<Index/>},
@@ -38,7 +43,12 @@ const routes = [
     {path:'/:courseName/:sessionID',element:<Session/>},
 
     {path:'/my-account/*',element:<Puser/>,children:[
-      {path:'',element:<UserIndex/>}
+      {path:'',element:<UserIndex/>},
+      {path:'orders',element:<Orders/>},
+      {path:'buyed',element:<UserCourses/>},
+      {path:'tickets',element:<Tickets/>},
+      {path:'tickets/answer/:id', element:<TicketAnswer/>},
+      {path:'send-ticket',element:<SendTicket/>}
     ]},
 
     {path:'/p-admin/*',element:<Admin/>,children:[
