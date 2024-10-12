@@ -42,11 +42,6 @@ export default function Sidebar() {
             </Link>
           </li>
           <li className="sidebar__item">
-            <a className="sidebar__link" href="#">
-              کیف پول من
-            </a>
-          </li>
-          <li className="sidebar__item">
             <Link className="sidebar__link" to="edit-account">
               جزئیات حساب کاربری
             </Link>
