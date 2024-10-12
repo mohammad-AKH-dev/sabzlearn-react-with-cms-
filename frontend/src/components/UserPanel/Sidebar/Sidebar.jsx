@@ -47,9 +47,9 @@ export default function Sidebar() {
             </a>
           </li>
           <li className="sidebar__item">
-            <a className="sidebar__link" href="#">
+            <Link className="sidebar__link" to="edit-account">
               جزئیات حساب کاربری
-            </a>
+            </Link>
           </li>
           <li className="sidebar__item">
             <Link className="sidebar__link" to={'buyed'}>

@@ -28,6 +28,7 @@ import UserCourses from "./pages/UserPanel/Courses/Courses";
 import SendTicket from "./pages/UserPanel/Tickets/SendTicket";
 import Tickets from "./pages/UserPanel/Tickets/Tickets";
 import TicketAnswer from "./pages/UserPanel/Tickets/TicketAnswer";
+import EditAccount from "./pages/UserPanel/EditAccount/EditAccount";
 
 const routes = [
     {path: '/', element:<Index/>},
@@ -48,7 +49,8 @@ const routes = [
       {path:'buyed',element:<UserCourses/>},
       {path:'tickets',element:<Tickets/>},
       {path:'tickets/answer/:id', element:<TicketAnswer/>},
-      {path:'send-ticket',element:<SendTicket/>}
+      {path:'send-ticket',element:<SendTicket/>},
+      {path:'edit-account',element:<EditAccount/>}
     ]},
 
     {path:'/p-admin/*',element:<Admin/>,children:[
