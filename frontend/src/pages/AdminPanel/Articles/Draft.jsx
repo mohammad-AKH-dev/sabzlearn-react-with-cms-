@@ -1,4 +1,5 @@
 import { CKEditor } from "@ckeditor/ckeditor5-react";
+import DOMPurify from "dompurify";
 import {
   ClassicEditor,
   Bold,
@@ -17,10 +18,40 @@ import {
 
 import "ckeditor5/ckeditor5.css";
 import "ckeditor5-premium-features/ckeditor5-premium-features.css";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { useParams } from "react-router-dom";
 
 export default function Draft() {
-  const [articleBody,setArticleBody] = useState('')
+  const [articleBody, setArticleBody] = useState("");
+  const [articleTitle, setArticleTitle] = useState("");
+  const [articleShortName, setArticleShortName] = useState("");
+  const [articleDescription, setArticleDescription] = useState("");
+  const [articleCategories, setArticleCategories] = useState([]);
+  const [mainArticleCategory, setMainArticleCategory] = useState({});
+  const { shortName } = useParams();
+
+  useEffect(() => {
+    fetch("http://localhost:4000/v1/category")
+      .then((res) => res.json())
+      .then((categories) => setArticleCategories(categories));
+
+    fetch(`http://localhost:4000/v1/articles/${shortName}`, {
+      headers: {
+        Authorization: `Bearer ${
+          JSON.parse(localStorage.getItem("user")).token
+        }`,
+      },
+    })
+      .then((res) => res.json())
+      .then((infos) => {
+        console.log(infos);
+        setArticleTitle(infos.title);
+        setArticleShortName(infos.shortName);
+        setArticleDescription(infos.description);
+        setArticleBody(DOMPurify.sanitize(infos.body));
+        setMainArticleCategory(infos.categoryID);
+      });
+  }, []);
   return (
     <>
       <div className="container-fluid" id="home-content">
@@ -34,7 +65,7 @@ export default function Draft() {
                 <label className="input-title" style={{ display: "block" }}>
                   عنوان
                 </label>
-                <input type="text" />
+                <input type="text" value={articleTitle} />
                 <span className="error-message text-danger"></span>
               </div>
             </div>
@@ -43,7 +74,7 @@ export default function Draft() {
                 <label className="input-title" style={{ display: "block" }}>
                   لینک
                 </label>
-                <input type="text" />
+                <input type="text" value={articleShortName} />
                 <span className="error-message text-danger"></span>
               </div>
             </div>
@@ -54,7 +85,11 @@ export default function Draft() {
                 </label>
                 {/* <textarea style={{ width: "100%", height: "200px" }}></textarea> */}
 
-                <input type="text" className="article-textarea" />
+                <input
+                  type="text"
+                  className="article-textarea"
+                  value={articleDescription}
+                />
                 <span className="error-message text-danger"></span>
               </div>
             </div>
@@ -64,65 +99,64 @@ export default function Draft() {
                   محتوا
                 </label>
                 <CKEditor
-                editor={ClassicEditor}
-                data={articleBody}
-                config={{
-                  toolbar: {
-                    items: [
-                      "undo",
-                      "redo",
-                      "|",
-                      "bold",
-                      "italic",
-                      "heading",
-                      "link",
-                      "uploadImage",
-                      "blockQuote",
-                      "numberedList",
-                      "bulletedList"
+                  editor={ClassicEditor}
+                  data={articleBody}
+                  config={{
+                    toolbar: {
+                      items: [
+                        "undo",
+                        "redo",
+                        "|",
+                        "bold",
+                        "italic",
+                        "heading",
+                        "link",
+                        "uploadImage",
+                        "blockQuote",
+                        "numberedList",
+                        "bulletedList",
+                      ],
+                    },
+                    plugins: [
+                      Bold,
+                      Essentials,
+                      Italic,
+                      Mention,
+                      Paragraph,
+                      Undo,
+                      Heading,
+                      Image,
+                      Link,
+                      ImageUpload,
+                      BlockQuote,
+                      List,
                     ],
-                  },
-                  plugins: [
-                    Bold,
-                    Essentials,
-                    Italic,
-                    Mention,
-                    Paragraph,
-                    Undo,
-                    Heading,
-                    Image,
-                    Link,
-                    ImageUpload,
-                    BlockQuote,
-                    List,
-                    
-                  ],
-                  heading: {
-                    options: [
-                      {
-                        model: "paragraph",
-                        title: "Paragraph",
-                        class: "ck-heading_paragraph",
-                      },
-                      {
-                        model: "heading1",
-                        view: "h1",
-                        title: "Heading 1",
-                        class: "ck-heading_heading1",
-                      },
-                      {
-                        model: "heading2",
-                        view: "h2",
-                        title: "Heading 2",
-                        class: "ck-heading_heading2",
-                      },
-                    ],
-                  },
-                }}
-                onChange={(event, editor) => {
-                  setArticleBody(editor.getData())
-                }}
-              />
+                    heading: {
+                      options: [
+                        {
+                          model: "paragraph",
+                          title: "Paragraph",
+                          class: "ck-heading_paragraph",
+                        },
+                        {
+                          model: "heading1",
+                          view: "h1",
+                          title: "Heading 1",
+                          class: "ck-heading_heading1",
+                        },
+                        {
+                          model: "heading2",
+                          view: "h2",
+                          title: "Heading 2",
+                          class: "ck-heading_heading2",
+                        },
+                      ],
+                    },
+                  }}
+                  onChange={(event, editor) => {
+                    setArticleBody(editor.getData());
+                  }}
+                />
                 <span className="error-message text-danger"></span>
               </div>
             </div>
@@ -142,6 +176,18 @@ export default function Draft() {
                 </label>
                 <select>
                   <option value="-1">دسته بندی مقاله را انتخاب کنید،</option>
+                  {articleCategories.map((article) => (
+                    <option
+                      key={article._id}
+                      value={
+                        article._id === mainArticleCategory._id
+                          ? mainArticleCategory._id
+                          : article._id
+                      }
+                    >
+                      {article.title === mainArticleCategory.title ? mainArticleCategory.title : article.title}
+                    </option>
+                  ))}
                 </select>
                 <span className="error-message text-danger"></span>
               </div>

@@ -103,6 +103,141 @@ export default function CourseInfo() {
     }
   };
 
+  const registerInCourse = (course) => {
+     if(course.price === 0){
+      MySwal.fire({
+        title:'آیا از ثبت نام در این دوره اطمینان دارید؟',
+        icon:'question',
+        confirmButtonText:'بله',
+        cancelButtonText:'خیر',
+        showCancelButton:true
+      }).then(result => {
+        if(result.isConfirmed){
+           fetch(`http://localhost:4000/v1/courses/${course._id}/register`,{
+            method:'POST',
+            headers:{
+               Authorization: `Bearer ${JSON.parse(localStorage.getItem('user')).token}`,
+               "Content-type": 'application/json'
+            },
+            body: JSON.stringify({price: course.price})
+           }).then(res => {
+            if(res.ok){
+              MySwal.fire({
+                title:'با موفقیت در دوره ثبت نام شدید',
+                icon:'success',
+                confirmButtonText:'خیلی هم عالی'
+              }).then(() => window.location.reload())
+            }else{
+              if(res.status === 409){
+                MySwal.fire({
+                  title:'شما قبلا در این دوره ثبت نام کرده اید',
+                  icon:'info',
+                  confirmButtonText:'اوکی'
+                })
+              }
+            }
+           })
+        }
+      })
+     }else{
+      MySwal.fire({
+        title:'آیا کد تخفیف دارید؟',
+        icon:"question",
+        confirmButtonText:'بله',
+        cancelButtonText:'ثبت نام نمیکنم',
+        denyButtonText:'خیر',
+        showCancelButton:true,
+        showDenyButton:true
+      }).then(result => {
+        if(result.isDenied){
+          fetch(`http://localhost:4000/v1/courses/${course._id}/register`,{
+            method:"POST",
+            headers:{
+              Authorization: `Bearer ${JSON.parse(localStorage.getItem('user')).token}`,
+              "Content-type": 'application/json'
+           },
+            body: JSON.stringify({price: course.price})
+          }).then(res => {
+            if(res.ok){
+              MySwal.fire({
+                title:'با موفقیت در دوره ثبت نام شدید',
+                icon:'success',
+                confirmButtonText:'خیلی هم عالی'
+              }).then(() => window.location.reload())
+            }else{
+              if(res.status === 409){
+                MySwal.fire({
+                  title:'شما قبلا در این دوره ثبت نام کرده اید',
+                  icon:'info',
+                  confirmButtonText:'اوکی'
+                })
+              }
+            }
+          })
+        } else if(result.isConfirmed){
+          MySwal.fire({
+            title:'کد تخفیف را وارد کنید:',
+            input:'text',
+            confirmButtonText:'ثبت نام'
+          }).then(code => {
+            if(code.value){
+                fetch(`http://localhost:4000/v1/offs/${code}`,{
+                  method:"POST",
+                  headers:{
+                    Authorization: `Bearer ${JSON.parse(localStorage.getItem('user')).token}`,
+                    "Content-type": 'application/json'
+                  },
+                  body: JSON.stringify({course:course._id})
+                }).then(res => {
+                  if(res.status === 404){
+                    MySwal.fire({
+                      title:'کد تخفیف معتبر نیست',
+                      confirmButtonText:'اوکی',
+                      icon:'error'
+                    })
+                  }else if(res.status === 409){
+                    MySwal.fire({
+                      title:'کد تخفیف استفاده شده است',
+                      confirmButtonText:'اوکی',
+                      icon:'error'
+                    })
+                  }else{
+                    return res.json()
+                  }
+                }).then(result => {
+                  fetch(`http://localhost:4000/v1/courses/${course._id}/register`,{
+                    method:'POST',
+                    headers:{
+                       Authorization: `Bearer ${JSON.parse(localStorage.getItem('user')).token}`,
+                       "Content-type": 'application/json'
+                    },
+                    body: JSON.stringify({price: course.price - (course.price * result.percent / 100)})
+                   }).then(res => {
+                    if(res.ok){
+                      MySwal.fire({
+                        title:'با موفقیت در دوره ثبت نام شدید',
+                        icon:'success',
+                        confirmButtonText:'خیلی هم عالی'
+                      }).then(() => window.location.reload())
+                    }else{
+                      if(res.status === 409){
+                        MySwal.fire({
+                          title:'شما قبلا در این دوره ثبت نام کرده اید',
+                          icon:'info',
+                          confirmButtonText:'اوکی'
+                        })
+                      }
+                    }
+                   })
+                })
+            }
+          }
+          )
+        }
+      })
+     }
+  }
+
   return (
     <>
       <Topbar />
@@ -443,7 +578,7 @@ export default function CourseInfo() {
                         دانشجوی دوره هستید
                       </span>
                     ) : (
-                      <span className="course-info__register-title">
+                      <span className="course-info__register-title" style={{cursor:'pointer'}} onClick={() => registerInCourse(courseDetails)}>
                         <i className="fas fa-graduation-cap course-info__register-icon"></i>
                         ثبت نام در دوره
                       </span>
