@@ -16,3 +16,7 @@ html,*,body {
 body{
     font-size: 1.6rem;
 }
+
+#sidebar {
+    overflow-y: auto !important;
+}

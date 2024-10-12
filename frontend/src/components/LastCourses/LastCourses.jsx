@@ -43,6 +43,7 @@ export default function LastCourses() {
                         coursePrice={course.price}
                         score={course.courseAverageScore}
                         href={course.shortName}
+                        discount={course.discount}
                       />
                     ))
                 : null}

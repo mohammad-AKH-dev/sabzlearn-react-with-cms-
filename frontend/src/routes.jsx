@@ -30,6 +30,8 @@ import Tickets from "./pages/UserPanel/Tickets/Tickets";
 import TicketAnswer from "./pages/UserPanel/Tickets/TicketAnswer";
 import EditAccount from "./pages/UserPanel/EditAccount/EditAccount";
 import PAdminPrivateRoute from "./components/PrivateRoutes/PAdminPrivateRoute";
+import AdminTickets from "./pages/AdminPanel/Tickets/Tickets";
+import Discounts from "./pages/AdminPanel/Discounts/Discounts";
 
 const routes = [
   { path: "/", element: <Index /> },
@@ -77,6 +79,8 @@ const routes = [
       { path: "sessions", element: <Sessions /> },
       { path: "comments", element: <Comments /> },
       { path: "offs", element: <Offs /> },
+      { path: "tickets",element:<AdminTickets/>},
+      { path: "discounts",element:<Discounts/>}
     ],
   },
 ];

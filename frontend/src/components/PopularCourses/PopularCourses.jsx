@@ -54,6 +54,7 @@ export default function PopularCourses() {
                           coursePrice={course?.price}
                           score={course?.courseAverageScore}
                           img={`http://localhost:4000/courses/covers/${course?.cover}`}
+                          discount={course.discount}
                         />
                       </SwiperSlide>
                     ))

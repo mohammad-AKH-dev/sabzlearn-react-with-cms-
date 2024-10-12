@@ -11,6 +11,7 @@ export default function CourseBox({
   students,
   score,
   href,
+  discount,
   width
 }) {
   const [isImgShow, setIsImgShow] = useState(false);
@@ -20,7 +21,12 @@ export default function CourseBox({
 
   return (
     <div className='col-4' style={{width:width}}>
-      <div className="course-box">
+      <div className="course-box" style={{position:'relative'}}>
+        {
+          discount !== 0 && coursePrice !== 0  ? (
+            <div className="badge bg-success" style={{position:'absolute', left:'0', rotate:'-30deg', zIndex:'999', top:'5px', padding:'5px', paddingRight:'10px',paddingLeft:'10px'}}>{discount}%</div>
+          ) : null
+        }
         <Link to={`/course-info/${href}`}>
           <img
             src={img}
@@ -75,7 +81,7 @@ export default function CourseBox({
               <span className="course-box__users-text">{students}</span>
             </div>
             <span className="course-box__price">
-              {coursePrice === 0 ? "رایگان" : coursePrice?.toLocaleString()}
+              {coursePrice === 0 ? "رایگان" : discount ? (coursePrice - (coursePrice * discount / 100)).toLocaleString() : coursePrice.toLocaleString()}
             </span>
           </div>
         </div>
